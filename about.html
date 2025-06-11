@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Al Falah charity organization</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap');
+    
+    :root {
+      --primary: #4f46e5;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      color: #1f2937;
+      min-height: 100vh;
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, rgba(79,70,229,0.8) 0%, rgba(16,185,129,0.8) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+    
+    .title-font {
+      font-family: 'Montserrat', sans-serif;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .floating-card {
+      transform: perspective(1000px) rotateY(0deg);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .floating-card:hover {
+      transform: perspective(1000px) rotateY(5deg) translateY(-10px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .contribution-item {
+      border-left: 4px solid var(--accent);
+      transition: all 0.3s ease;
+    }
+    
+    .contribution-item:hover {
+      transform: translateX(10px);
+      background: rgba(245,158,11,0.05);
+    }
+    
+    .glow-text {
+      text-shadow: 0 0 10px rgba(79,70,229,0.3);
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <!-- Hero Section -->
+  <div class="hero-section text-white py-20 px-4 md:px-8 text-center">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="title-font text-4xl md:text-6xl mb-6 glow-text">AL FALAH CHARITY ORGANIZATION<span class="gradient-text"></span></h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto">
+        Reconnecting • Collaborating • Elevating
+      </p>
+      <div class="mt-10 pulse-animation">
+        <a href="#about-content" class="inline-block bg-white text-indigo-600 px-8 py-3 rounded-full font-bold shadow-lg hover:bg-gray-100 transition-all">
+          Explore Our Story <i class="fas fa-arrow-down ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="about-content" class="max-w-6xl mx-auto px-4 md:px-8 py-14 -mt-16 relative z-10">
+    <!-- About Card -->
+    <div class="floating-card bg-white rounded-2xl p-8 md:p-16 mb-16">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+          <div class="bg-indigo-100 p-6 rounded-xl inline-block">
+            <i class="fas fa-users text-6xl text-indigo-600"></i>
+          </div>
+        </div>
+        <div class="md:w-1/2">
+          <h2 class="text-3xl font-bold mb-6 gradient-text">Our Legacy</h2>
+          <p class="text-lg mb-6">
+            Welcome to the official <strong class="text-indigo-600">Al Falah charity organization</strong> platform - a dynamic space where former students reconnect, innovate, and shape the future of our community through collaboration and collective action.
+          </p>
+          <div class="flex space-x-4">
+            <div class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-semibold">
+              <i class="fas fa-hands-helping mr-2"></i> Community
+            </div>
+            <div class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-semibold">
+              <i class="fas fa-lightbulb mr-2"></i> Innovation
+            </div>
+            <div class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold">
+              <i class="fas fa-graduation-cap mr-2"></i> Legacy
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div class="floating-card bg-gradient-to-br from-indigo-50 to-emerald-50 rounded-2xl p-8">
+        <div class="flex items-center mb-6">
+          <div class="bg-indigo-600 text-white p-3 rounded-full mr-4">
+            <i class="fas fa-bullseye text-xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-800">Our Mission</h2>
+        </div>
+        <p class="text-gray-700">
+          To forge an <strong class="text-indigo-600">unbreakable bond</strong> between organization that transcends time, creating a network of support, opportunity, and shared purpose. We empower members to give back through mentorship, philanthropy, and active participation in shaping our collective future.
+        </p>
+      </div>
+      
+      <div class="floating-card bg-gradient-to-br from-amber-50 to-indigo-50 rounded-2xl p-8">
+        <div class="flex items-center mb-6">
+          <div class="bg-emerald-600 text-white p-3 rounded-full mr-4">
+            <i class="fas fa-eye text-xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-800">Our Vision</h2>
+        </div>
+        <p class="text-gray-700">
+          A thriving ecosystem where every member contributes to <strong class="text-emerald-600">lasting impact</strong> - uplifting communities, strengthening our neighborhoods, and creating ripples of positive change throughout society. We measure success in lives touched and opportunities created.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contribution Section -->
+    <div class="mb-16">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4 gradient-text">Your Role in Our Journey</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Every voice matters. Every action counts. Here's how you can amplify your impact:
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="contribution-item bg-white p-6 rounded-xl">
+          <div class="text-amber-500 text-3xl mb-4">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">Share Ideas</h3>
+          <p class="text-gray-600">
+            Shape our direction through the digital suggestion box. Innovative thinking drives progress.
+          </p>
+        </div>
+        
+        <div class="contribution-item bg-white p-6 rounded-xl">
+          <div class="text-indigo-500 text-3xl mb-4">
+            <i class="fas fa-vote-yea"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">Cast Your Vote</h3>
+          <p class="text-gray-600">
+            Participate in organization decisions that determine our collective future. Your vote is your voice.
+          </p>
+        </div>
+        
+        <div class="contribution-item bg-white p-6 rounded-xl">
+          <div class="text-emerald-500 text-3xl mb-4">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">Volunteer</h3>
+          <p class="text-gray-600">
+            Offer your time and skills to initiatives that create real change. Hands build the future.
+          </p>
+        </div>
+        
+        <div class="contribution-item bg-white p-6 rounded-xl">
+          <div class="text-purple-500 text-3xl mb-4">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">Stay Engaged</h3>
+          <p class="text-gray-600">
+            Attend virtual forums and meetings. Connection fuels collaboration and opportunity.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connection Section -->
+    <div class="floating-card bg-gradient-to-r from-indigo-500 to-emerald-500 text-white rounded-2xl p-8 md:p-12 mb-16">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-2/3 mb-8 md:mb-0">
+          <h2 class="text-3xl font-bold mb-4">Stay Connected</h2>
+          <p class="text-lg mb-6">
+            Our platform is your hub for memb activities. Expect regular updates, announcements, and exclusive content designed to keep our community vibrant and informed.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="bg-white text-indigo-600 px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-all">
+              <i class="fab fa-facebook-f mr-2"></i> Follow
+            </a>
+            <a href="#" class="bg-white text-indigo-600 px-6 py-2 rounded-full font-semibold hover:bg-gray-100 transition-all">
+              <i class="fab fa-instagram mr-2"></i> Connect
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/3 text-center">
+          <i class="fas fa-broadcast-tower text-6xl opacity-80"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center">
+      <h2 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Your Mark?</h2>
+      <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        Join the movement of active volunteers shaping our shared future. Your journey continues here.
+      </p>
+      <a href="contact.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg transition-all transform hover:scale-105">
+        Get Involved Now <i class="fas fa-arrow-right ml-2"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12 px-4 md:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <h3 class="title-font text-2xl mb-2">Al Falah charity organization</h3>
+          <p class="text-gray-400">United in Excellence, Bound by Legacy</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 Al Falah charity organization. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

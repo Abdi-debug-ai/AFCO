@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Events Section</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #93c5fd;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            padding: 2rem;
+        }
+
+        .events-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .icon-container {
+            background: var(--primary-light);
+            padding: 0.75rem;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .events-content {
+            padding: 1.5rem;
+        }
+
+        .events-filter {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: var(--gray-200);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .events-list {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .event-card {
+            display: flex;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--gray-200);
+        }
+
+        .event-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .event-date {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            min-width: 3.5rem;
+            text-align: center;
+            margin-right: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .event-date .day {
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .event-date .month {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .event-time {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .event-time i {
+            font-size: 0.75rem;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-upcoming {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+
+        .status-ongoing {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .view-all-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: var(--primary);
+            color: white;
+            margin-top: 1.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .view-all-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-600);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gray-200);
+        }
+
+        .event-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .event-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Animation for new events */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .new-event {
+            animation: pulse 2s infinite;
+            position: relative;
+        }
+
+        .new-event::before {
+            content: "New";
+            position: absolute;
+            top: -0.5rem;
+            right: -0.5rem;
+            background: var(--danger);
+            color: white;
+            font-size: 0.625rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            z-index: 10;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .events-filter {
+                justify-content: center;
+            }
+            
+            .event-card {
+                flex-direction: column;
+            }
+            
+            .event-date {
+                margin-right: 0;
+                margin-bottom: 1rem;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+                justify-content: flex-start;
+                min-width: auto;
+                width: fit-content;
+            }
+            
+            .event-date .day {
+                font-size: 1rem;
+            }
+            
+            .event-date .month {
+                margin-top: 0;
+            }
+        }
+
+        /* Calendar view toggle */
+        .view-toggle {
+            display: flex;
+            margin-left: auto;
+            background: var(--gray-100);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+        }
+
+        .view-toggle-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+        .view-toggle-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div ="events-container">
+        <div ="section-card">
+            <div class="section-header">
+                <div class="icon-container">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h2 class="section-title">Upcoming Events</h2>
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="list-view-btn">
+                        <i class="fas fa-list"></i> List
+                    </button>
+                    <button class="view-toggle-btn" id="calendar-view-btn">
+                        <i class="fas fa-calendar"></i> Calendar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="events-content">
+                <div class="events-filter">
+                    <button class="filter-btn active" data-filter="all">All Events</button>
+                    <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                    <button class="filter-btn" data-filter="ongoing">Ongoing</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+                
+                <div class="events-list" id="events-list">
+                    <!-- Event cards will be populated here by JavaScript -->
+                </div>
+                
+                <button class="view-all-btn" id="view-all-btn">
+                    <i class="fas fa-calendar-alt"></i> View All Events
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample event data
+            const events = [
+                {
+                    id: 1,
+                    title: "Annual General Meeting",
+                    date: new Date(2023, 6, 1), // July 1, 2023 (month is 0-indexed)
+                    time: "9:00 PM - 11:00 PM",
+                    location: "Virtual (Zoom)",
+                    description: "Our quarterly general meeting where we discuss organization progress and future plans. All members are required to attend.",
+                    status: "completed",
+                    actions: ["agenda", "minutes"]
+                },
+                {
+                    id: 2,
+                    title: "Physical Team Building",
+                    date: new Date(2023, 7, 20), // August 20, 2023
+                    time: "8:00 AM - 12:00 PM",
+                    location: "Isiolo, confrence Hall",
+                    description: " improve collaboration across.",
+                    status: "upcoming",
+                    actions: ["register", "remind"],
+                    isNew: true
+                },
+                {
+                    id: 3,
+                    title: "Leadership Workshop",
+                    date: new Date(2023, 7, 15), // August 15, 2023
+                    time: "2:00 PM - 5:00 PM",
+                    location: "Conference Room A",
+                    description: "Interactive workshop on modern leadership techniques with guest speaker.",
+                    status: "upcoming",
+                    actions: ["register", "details"]
+                },
+                {
+                    id: 4,
+                    title: "Organization Launch",
+                    date: new Date(2023, 6, 25), // July 25, 2023
+                    time: "10:00 AM - 12:00 PM",
+                    location: "Google meet",
+                    description: "planning and executing.",
+                    status: "ongoing",
+                    actions: ["join", "details"]
+                },
+                {
+                    id: 5,
+                    title: "Community Volunteer Day",
+                    date: new Date(2023, 8, 10), // September 10, 2023
+                    time: "9:00 AM - 3:00 PM",
+                    location: "City Community Center",
+                    description: "Give back to the community through various volunteer activities. Lunch will be provided.",
+                    status: "upcoming",
+                    actions: ["register", "details"]
+                }
+            ];
+
+            // DOM elements
+            const eventsList = document.getElementById('events-list');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const viewAllBtn = document.getElementById('view-all-btn');
+            const listViewBtn = document.getElementById('list-view-btn');
+            const calendarViewBtn = document.getElementById('calendar-view-btn');
+
+            // Format date as "1st", "2nd", "3rd", etc.
+            function getOrdinalSuffix(day) {
+                if (day > 3 && day < 21) return 'th';
+                switch (day % 10) {
+                    case 1: return 'st';
+                    case 2: return 'nd';
+                    case 3: return 'rd';
+                    default: return 'th';
+                }
+            }
+
+            // Format month as short name (JAN, FEB, etc.)
+            function formatMonth(date) {
+                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                return months[date.getMonth()];
+            }
+
+            // Render events based on filter
+            function renderEvents(filter = 'all') {
+                eventsList.innerHTML = '';
+                
+                const filteredEvents = events.filter(event => {
+                    if (filter === 'all') return true;
+                    return event.status === filter;
+                });
+
+                if (filteredEvents.length === 0) {
+                    eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No ${filter} events found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                filteredEvents.forEach(event => {
+                    const day = event.date.getDate();
+                    const suffix = getOrdinalSuffix(day);
+                    const month = formatMonth(event.date);
+                    
+                    let statusClass = '';
+                    let statusText = '';
+                    switch(event.status) {
+                        case 'upcoming':
+                            statusClass = 'status-upcoming';
+                            statusText = 'Upcoming';
+                            break;
+                        case 'ongoing':
+                            statusClass = 'status-ongoing';
+                            statusText = 'Ongoing';
+                            break;
+                        case 'completed':
+                            statusClass = 'status-completed';
+                            statusText = 'Completed';
+                            break;
+                    }
+
+                    const eventCard = document.createElement('div');
+                    eventCard.className = `event-card ${event.isNew ? 'new-event' : ''}`;
+                    eventCard.innerHTML = `
+                        <div class="event-date" style="background: ${getDateBackgroundColor(event.status)}; color: ${getDateTextColor(event.status)};">
+                            <div class="day">${day}</div>
+                            <div class="month">${month}</div>
+                        </div>
+                        <div class="event-details">
+                            <h3 class="event-title">${event.title}</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${event.location}
+                            </div>
+                            <div class="event-time">
+                                <i class="far fa-clock"></i>
+                                ${event.time}
+                            </div>
+                            <p class="event-description">${event.description}</p>
+                            <span class="event-status ${statusClass}">${statusText}</span>
+                            <div class="event-actions">
+                                ${event.actions.map(action => `
+                                    <button class="action-btn ${action === 'register' || action === 'join' ? 'btn-primary' : 'btn-outline'}">
+                                        ${getActionIcon(action)} ${getActionText(action)}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    eventsList.appendChild(eventCard);
+                });
+            }
+
+            // Helper functions for styling
+            function getDateBackgroundColor(status) {
+                switch(status) {
+                    case 'upcoming': return 'rgba(16, 185, 129, 0.1)';
+                    case 'ongoing': return 'rgba(245, 158, 11, 0.1)';
+                    case 'completed': return 'rgba(239, 68, 68, 0.1)';
+                    default: return 'rgba(59, 130, 246, 0.1)';
+                }
+            }
+
+            function getDateTextColor(status) {
+                switch(status) {
+                    case 'upcoming': return '#10b981';
+                    case 'ongoing': return '#f59e0b';
+                    case 'completed': return '#ef4444';
+                    default: return '#3b82f6';
+                }
+            }
+
+            function getActionIcon(action) {
+                switch(action) {
+                    case 'register': return '<i class="fas fa-user-plus"></i>';
+                    case 'remind': return '<i class="fas fa-bell"></i>';
+                    case 'details': return '<i class="fas fa-info-circle"></i>';
+                    case 'agenda': return '<i class="fas fa-list-ol"></i>';
+                    case 'minutes': return '<i class="fas fa-file-alt"></i>';
+                    case 'join': return '<i class="fas fa-video"></i>';
+   default: return '<i class="fas fa-arrow-right"></i>';
+                }
+            }
+
+            function getActionText(action) {
+                return action.charAt(0).toUpperCase() + action.slice(1);
+            }
+
+            // Event listeners
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderEvents(button.dataset.filter);
+                });
+            });
+
+            viewAllBtn.addEventListener('click', () => {
+                alert('Redirecting to full events calendar...');
+                // In a real implementation, this would navigate to /events.html
+            });
+
+            listViewBtn.addEventListener('click', () => {
+                listViewBtn.classList.add('active');
+                calendarViewBtn.classList.remove('active');
+                // In a full implementation, this would switch to list view
+            });
+
+            calendarViewBtn.addEventListener('click', () => {
+                calendarViewBtn.classList.add('active');
+                listViewBtn.classList.remove('active');
+                alert('Switching to calendar view...');
+                // In a full implementation, this would switch to calendar view
+            });
+
+            // Initial render
+            renderEvents();
+        });
+    </script>
+</body>
+</html>
+
+

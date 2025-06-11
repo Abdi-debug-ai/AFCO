@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charity Initiatives - Al Falah Alumni</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap');
+    
+    :root {
+      --primary: #5e35b1;
+      --secondary: #00acc1;
+      --accent: #ffab00;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, rgba(94,53,177,0.9) 0%, rgba(0,172,193,0.9) 100%),
+                  url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+    
+    .title-font {
+      font-family: 'Playfair Display', serif;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .project-card {
+      transform: perspective(1000px) rotateX(0deg);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    
+    .project-card:hover {
+      transform: perspective(1000px) rotateX(5deg) translateY(-10px);
+      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.25);
+    }
+    
+    .impact-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      transform: rotate(15deg);
+      z-index: 10;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+    
+    .donate-btn {
+      background: linear-gradient(135deg, var(--accent) 0%, #ff6d00 100%);
+      box-shadow: 0 4px 15px rgba(255,171,0,0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .donate-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255,171,0,0.5);
+    }
+    
+    .stats-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .floating {
+      animation: floating 6s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero-section text-white py-24 px-4 md:px-8 text-center relative">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <h1 class="title-font text-4xl md:text-6xl mb-6">Our <span class="gradient-text">Charity Initiatives</span></h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10">
+        Transforming lives through compassion and collective action
+      </p>
+   
+        
+
+  <!-- Call to Action -->
+  <section id="donate" class="py-20 px-4 md:px-8 bg-gradient-to-r from-indigo-500 to-teal-500 text-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="floating inline-block mb-8">
+        <i class="fas fa-hands-helping text-6xl"></i>
+      </div>
+      <h2 class="title-font text-3xl md:text-4xl mb-6">Join Our <span class="text-yellow-300">Humanitarian</span> Mission</h2>
+      <p class="text-xl mb-8 max-w-2
