@@ -297,18 +297,24 @@
 </html>
 
 
+
 <!-- Announcement Section -->
-<section ="bg-white p-6 rounded-2xl shadow-md section-card">
-  <div class="flex items-center justify-between mb-4">
-    <div class="flex items-center">
-      <div class="bg-green-100 p-2 rounded-full mr-4">
-        <i class="fas fa-bullhorn text-green-600 text-xl"></i>
+<section class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-all duration-300 hover:shadow-xl">
+  <!-- Header with Gradient Background -->
+  <div class="bg-gradient-to-r from-green-500 to-green-600 p-5 text-white">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="bg-white/20 p-3 rounded-full mr-4 backdrop-blur-sm">
+          <i class="fas fa-bullhorn text-white text-xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold">Latest Announcement</h2>
       </div>
-      <h2 class="text-2xl font-bold text-gray-800">Latest Announcement</h2>
+      <button id="editAnnouncementBtn" 
+              class="p-2 bg-white/20 rounded-full hover:bg-white/30 transition backdrop-blur-sm"
+              aria-label="Edit announcement">
+        <i class="fas fa-pencil-alt text-white"></i>
+      </button>
     </div>
-    <button id="editAnnouncementBtn" class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium hover:bg-blue-200 transition">
-      🖊️ 
-    </button>
   </div>
   
   <!-- Password Modal -->
