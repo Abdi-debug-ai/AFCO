@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFCOlite - Social Media Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            min-height: 100vh;
+            font-size: 15px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #1a1a1a;
+        }
+
+        .sidebar-item i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .sidebar-item span {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            border-left: 1px solid #2f3336;
+            border-right: 1px solid #2f3336;
+            max-width: 600px;
+        }
+
+        .header {
+            font-size: 20px;
+            font-weight: 800;
+            padding: 10px 0;
+            border-bottom: 1px solid #2f3336;
+        }
+
+        .post-form {
+            padding: 15px 0;
+            border-bottom: 1px solid #2f3336;
+            display: none;
+        }
+
+        .post-form textarea {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            resize: none;
+            padding: 10px;
+        }
+
+        .post-form textarea:focus {
+            outline: none;
+        }
+
+        .post-form .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .post-form .actions i {
+            color: #1DA1F2;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .post-form button {
+            background-color: #1DA1F2;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .post-form button:hover {
+            background-color: #0d8ece;
+        }
+
+        .posts {
+            padding-top: 10px;
+        }
+
+        .post {
+            padding: 15px;
+            border-bottom: 1px solid #2f3336;
+            transition: background-color 0.2s;
+        }
+
+        .post:hover {
+            background-color: #0d0d0d;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .post-header .username {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .post-header .handle {
+            color: #71767b;
+            font-size: 15px;
+        }
+
+        .post-content {
+            margin: 10px 0;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 40px;
+            color: #71767b;
+            font-size: 14px;
+        }
+
+        .post-actions i {
+            cursor: pointer;
+        }
+
+        .post-actions .liked {
+            color: #f91880;
+        }
+
+        .post-actions .shared {
+            color: #00ba7c;
+        }
+
+        .comment-section {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-form input {
+            flex: 1;
+            background-color: #1a1a1a;
+            border: none;
+            border-radius: 10px;
+            padding: 8px;
+            color: #fff;
+        }
+
+        .comment-form button {
+            background-color: #1DA1F2;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .explore-form {
+            padding: 15px 0;
+            border-bottom: 1px solid #2f3336;
+            display: none;
+        }
+
+        .explore-form input {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .notifications {
+            padding-top: 10px;
+            display: none;
+        }
+
+        .notification {
+            padding: 15px;
+            border-bottom: 1px solid #2f3336;
+        }
+
+        .profile {
+            padding-top: 10px;
+            display: none;
+        }
+
+        .profile-header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid #2f3336;
+        }
+
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .profile-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .profile-header p {
+            color: #71767b;
+            margin: 5px 0;
+        }
+
+        .profile-header button {
+            background-color: #1DA1F2;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .sidebar-item span {
+                display: none;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-dove"></i><span>AFCOlite</span></div>
+            <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i><span>Home</span></div>
+            <div class="sidebar-item" onclick="showPage('explore')"><i class="fas fa-search"></i><span>Explore</span></div>
+            <div class="sidebar-item" onclick="showPage('notifications')"><i class="fas fa-bell"></i><span>Notifications</span></div>
+            <div class="sidebar-item" onclick="showPage('profile')"><i class="fas fa-user"></i><span>Profile</span></div>
+            <div class="sidebar-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header" id="header">Home</div>
+            <div class="post-form" id="postForm">
+                <textarea id="postContent" rows="3" placeholder="What's happening?"></textarea>
+                <div class="actions">
+                    <div>
+                        <i class="fas fa-image"></i>
+                        <i class="fas fa-video"></i>
+                        <i class="fas fa-poll"></i>
+                    </div>
+                    <button onclick="createPost()">Post</button>
+                </div>
+            </div>
+            <div class="explore-form" id="exploreForm">
+                <input type="text" id="searchInput" placeholder="Search AFCOlite" oninput="searchPosts()">
+            </div>
+            <div class="notifications" id="notifications"></div>
+            <div class="profile" id="profile"></div>
+            <div class="posts" id="postsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // JSONBin.io Configuration
+        const JSONBIN_BIN_ID = '684adcbb8960c979a5a89f8b'; // Replace with your JSONBin Bin ID
+        const JSONBIN_X_MASTER_KEY = '$2a$10$47gr4/kwbou3AGBRxw0ezuwkGNmHgdjGK1kd2dfMAoNgqtqyscdoG'; // Replace with your JSONBin X-Master-Key
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+        // Mock user data
+        const currentUser = {
+            username: 'User',
+            handle: '@User',
+            profilePic: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+            bio: 'Welcome to AFCOlite!',
+            joined: 'June 2025'
+        };
+
+        // Page navigation
+        function showPage(page) {
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`.sidebar-item[onclick="showPage('${page}')"]`).classList.add('active');
+            document.getElementById('header').textContent = page.charAt(0).toUpperCase() + page.slice(1);
+            document.getElementById('postForm').style.display = page === 'home' ? 'block' : 'none';
+            document.getElementById('exploreForm').style.display = page === 'explore' ? 'block' : 'none';
+            document.getElementById('notifications').style.display = page === 'notifications' ? 'block' : 'none';
+            document.getElementById('profile').style.display = page === 'profile' ? 'block' : 'none';
+            document.getElementById('postsContainer').style.display = page !== 'notifications' && page !== 'profile' ? 'block' : 'none';
+
+            if (page === 'notifications') fetchNotifications();
+            if (page === 'profile') showProfile();
+            if (page === 'home' || page === 'explore') fetchPosts();
+        }
+
+        // Fetch posts from JSONBin.io
+        async function fetchPosts(filter = '') {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                let posts = data.record.posts || [];
+                if (filter) {
+                    posts = posts.filter(post => post.content.toLowerCase().includes(filter.toLowerCase()));
+                }
+                displayPosts(posts);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                alert('Failed to load posts.');
+            }
+        }
+
+        // Display posts
+        function displayPosts(posts) {
+            const postsContainer = document.getElementById('postsContainer');
+            postsContainer.innerHTML = '';
+            posts.reverse().forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <img src="${post.profilePic}" alt="Profile Pic">
+                        <div>
+                            <span class="username">${post.username}</span>
+                            <span class="handle">${post.handle}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-meta">${new Date(post.timestamp).toLocaleString()}</div>
+                    <div class="post-actions">
+                        <span><i class="fas fa-comment" onclick="toggleCommentForm('${post.id}')"></i> ${post.comments.length}</span>
+                        <span><i class="${post.likes.includes(currentUser.username) ? 'fas fa-heart liked' : 'far fa-heart'}" onclick="toggleLike('${post.id}')"></i> ${post.likes.length}</span>
+                        <span><i class="${post.shares.includes(currentUser.username) ? 'fas fa-share shared' : 'fas fa-share'}" onclick="sharePost('${post.id}')"></i> ${post.shares.length}</span>
+                    </div>
+                    <div class="comment-section" id="commentSection${post.id}" style="display: none;">
+                        <div class="comment-form">
+                            <input type="text" id="commentInput${post.id}" placeholder="Add a comment...">
+                            <button onclick="addComment('${post.id}')">Comment</button>
+                        </div>
+                        ${post.comments.map(comment => `
+                            <div class="comment">
+                                <img src="${comment.profilePic}" alt="Profile Pic">
+                                <div class="comment-content">
+                                    <span class="username">${comment.username}</span>
+                                    <span class="handle">${comment.handle}</span>
+                                    <p>${comment.content}</p>
+                                    <span class="post-meta">${new Date(comment.timestamp).toLocaleString()}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        // Create a new post
+        async function createPost() {
+            const postContent = document.getElementById('postContent').value.trim();
+            if (!postContent) {
+                alert('Please enter some content to post.');
+                return;
+            }
+
+            const newPost = {
+                id: Date.now().toString(),
+                username: currentUser.username,
+                handle: currentUser.handle,
+                profilePic: currentUser.profilePic,
+                content: postContent,
+                timestamp: new Date().toISOString(),
+                likes: [],
+                comments: [],
+                shares: []
+            };
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
+                posts.push(newPost);
+
+                const notification = {
+                    id: Date.now().toString(),
+                    type: 'post',
+                    user: currentUser.username,
+                    content: `${currentUser.username} posted a new update.`,
+                    timestamp: new Date().toISOString()
+                };
+                const notifications = data.record.notifications || [];
+                notifications.push(notification);
+
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_X_MASTER_KEY
+                    },
+                    body: JSON.stringify({ posts, users: data.record.users || [], notifications })
+                });
+
+                document.getElementById('postContent').value = '';
+                fetchPosts();
+            } catch (error) {
+                console.error('Error creating post:', error);
+                alert('Failed to create post. Please try again.');
+            }
+        }
+
+        // Toggle like on a post
+        async function toggleLike(postId) {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    const index = post.likes.indexOf(currentUser.username);
+                    if (index === -1) {
+                        post.likes.push(currentUser.username);
+                        const notification = {
+                            id: Date.now().toString(),
+                            type: 'like',
+                            user: currentUser.username,
+                            content: `${currentUser.username} liked a post.`,
+                            timestamp: new Date().toISOString()
+                        };
+                        const notifications = data.record.notifications || [];
+                        notifications.push(notification);
+                        await fetch(JSONBIN_URL, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_X_MASTER_KEY
+                            },
+                            body: JSON.stringify({ posts, users: data.record.users || [], notifications })
+                        });
+                    } else {
+                        post.likes.splice(index, 1);
+                        await fetch(JSONBIN_URL, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_X_MASTER_KEY
+                            },
+                            body: JSON.stringify({ posts, users: data.record.users || [], notifications: data.record.notifications || [] })
+                        });
+                    }
+                    fetchPosts();
+                }
+            } catch (error) {
+                console.error('Error toggling like:', error);
+                alert('Failed to like post.');
+            }
+        }
+
+        // Share a post
+        async function sharePost(postId) {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    const index = post.shares.indexOf(currentUser.username);
+                    if (index === -1) {
+                        post.shares.push(currentUser.username);
+                        const notification = {
+                            id: Date.now().toString(),
+                            type: 'share',
+                            user: currentUser.username,
+                            content: `${currentUser.username} shared a post.`,
+                            timestamp: new Date().toISOString()
+                        };
+                        const notifications = data.record.notifications || [];
+                        notifications.push(notification);
+                        await fetch(JSONBIN_URL, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_X_MASTER_KEY
+                            },
+                            body: JSON.stringify({ posts, users: data.record.users || [], notifications })
+                        });
+                        const shareUrl = `${window.location.href}#post-${postId}`;
+                        await navigator.clipboard.writeText(shareUrl);
+                        alert('Post URL copied to clipboard!');
+                    }
+                    fetchPosts();
+                }
+            } catch (error) {
+                console.error('Error sharing post:', error);
+                alert('Failed to share post.');
+            }
+        }
+
+        // Toggle comment form
+        function toggleCommentForm(postId) {
+            const commentSection = document.getElementById(`commentSection${postId}`);
+            commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Add a comment
+        async function addComment(postId) {
+            const commentInput = document.getElementById(`commentInput${postId}`);
+            const content = commentInput.value.trim();
+            if (!content) {
+                alert('Please enter a comment.');
+                return;
+            }
+
+            const newComment = {
+                username: currentUser.username,
+                handle: currentUser.handle,
+                profilePic: currentUser.profilePic,
+                content,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments.push(newComment);
+                    const notification = {
+                        id: Date.now().toString(),
+                        type: 'comment',
+                        user: currentUser.username,
+                        content: `${currentUser.username} commented on a post.`,
+                        timestamp: new Date().toISOString()
+                    };
+                    const notifications = data.record.notifications || [];
+                    notifications.push(notification);
+                    await fetch(JSONBIN_URL, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': JSONBIN_X_MASTER_KEY
+                        },
+                        body: JSON.stringify({ posts, users: data.record.users || [], notifications })
+                    });
+                    commentInput.value = '';
+                    fetchPosts();
+                }
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                alert('Failed to add comment.');
+            }
+        }
+
+        // Search posts
+        function searchPosts() {
+            const query = document.getElementById('searchInput').value.trim();
+            fetchPosts(query);
+        }
+
+        // Fetch and display notifications
+        async function fetchNotifications() {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const notifications = data.record.notifications || [];
+                const notificationsContainer = document.getElementById('notifications');
+                notificationsContainer.innerHTML = '';
+                notifications.reverse().forEach(notification => {
+                    const notificationElement = document.createElement('div');
+                    notificationElement.className = 'notification';
+                    notificationElement.innerHTML = `
+                        <div>${notification.content}</div>
+                        <div class="post-meta">${new Date(notification.timestamp).toLocaleString()}</div>
+                    `;
+                    notificationsContainer.appendChild(notificationElement);
+                });
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+                alert('Failed to load notifications.');
+            }
+        }
+
+        // Show profile page
+        async function showProfile() {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const posts = data.record.posts || [];
+                const userPosts = posts.filter(post => post.username === currentUser.username);
+                const profileContainer = document.getElementById('profile');
+                profileContainer.innerHTML = `
+                    <div class="profile-header">
+                        <img src="${currentUser.profilePic}" alt="Profile Pic">
+                        <h2>${currentUser.username}</h2>
+                        <p>${currentUser.handle}</p>
+                        <p>${currentUser.bio}</p>
+                        <p>Joined ${currentUser.joined}</p>
+                        <button onclick="alert('Edit profile (mock action)')">Edit Profile</button>
+                    </div>
+                `;
+                const postsContainer = document.createElement('div');
+                postsContainer.className = 'posts';
+                userPosts.reverse().forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'post';
+                    postElement.innerHTML = `
+                        <div class="post-header">
+                            <img src="${post.profilePic}" alt="Profile Pic">
+                            <div>
+                                <span class="username">${post.username}</span>
+                                <span class="handle">${post.handle}</span>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                        <div class="post-meta">${new Date(post.timestamp).toLocaleString()}</div>
+                        <div class="post-actions">
+                            <span><i class="fas fa-comment" onclick="toggleCommentForm('${post.id}')"></i> ${post.comments.length}</span>
+                            <span><i class="${post.likes.includes(currentUser.username) ? 'fas fa-heart liked' : 'far fa-heart'}" onclick="toggleLike('${post.id}')"></i> ${post.likes.length}</span>
+                            <span><i class="${post.shares.includes(currentUser.username) ? 'fas fa-share shared' : 'fas fa-share'}" onclick="sharePost('${post.id}')"></i> ${post.shares.length}</span>
+                        </div>
+                    `;
+                    postsContainer.appendChild(postElement);
+                });
+                profileContainer.appendChild(postsContainer);
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Failed to load profile.');
+            }
+        }
+
+        // Logout (mock)
+        function logout() {
+            alert('Logged out (mock action).');
+        }
+
+        // Periodic refresh
+        setInterval(() => {
+            if (document.getElementById('postsContainer').style.display === 'block') {
+                fetchPosts(document.getElementById('searchInput')?.value || '');
+            }
+            if (document.getElementById('notifications').style.display === 'block') {
+                fetchNotifications();
+            }
+        }, 30000);
+
+        // Initial load
+        showPage('home');
+    </script>
+</body>
+</html>
+
+
+
