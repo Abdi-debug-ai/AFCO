@@ -106,6 +106,7 @@
             color: #1DA1F2;
             cursor: pointer;
             font-size: 18px;
+            margin-right: 10px;
         }
 
         .post-form button {
@@ -142,10 +143,33 @@
             gap: 10px;
         }
 
-        .post-header img {
+        .post-header img, .comment img, .profile-header img {
             width: 48px;
             height: 48px;
             border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .post-header img[onerror], .comment img[onerror], .profile-header img[onerror] {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2f3336;
+            border-radius: 50%;
+        }
+
+        .profile-header img[onerror] {
+            font-size: 48px;
+            width: 100px;
+            height: 100px;
         }
 
         .post-header .username {
@@ -156,6 +180,12 @@
         .post-header .handle {
             color: #71767b;
             font-size: 15px;
+        }
+
+        .verified-badge {
+            color: #1DA1F2;
+            margin-left: 5px;
+            font-size: 14px;
         }
 
         .post-content {
@@ -197,7 +227,6 @@
         .comment img {
             width: 32px;
             height: 32px;
-            border-radius: 50%;
         }
 
         .comment-content {
@@ -208,6 +237,7 @@
             display: flex;
             gap: 10px;
             margin-top: 10px;
+            position: relative;
         }
 
         .comment-form input {
@@ -225,6 +255,24 @@
             border-radius: 10px;
             padding: 8px 16px;
             color: #fff;
+            cursor: pointer;
+        }
+
+        .sticker-picker {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1a1a1a;
+            border: 1px solid #2f3336;
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .sticker-picker span {
+            font-size: 24px;
+            margin: 5px;
             cursor: pointer;
         }
 
@@ -265,13 +313,6 @@
             border-bottom: 1px solid #2f3336;
         }
 
-        .profile-header img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-
         .profile-header h2 {
             font-size: 18px;
             font-weight: 700;
@@ -292,6 +333,52 @@
             margin-top: 10px;
         }
 
+        #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #loginModal div {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        #loginModal input, #editProfileForm input, #editProfileForm textarea {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+            background: #2f3336;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        #loginModal button, #editProfileForm button {
+            background: #1DA1F2;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #editProfileForm {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 60px;
@@ -308,8 +395,20 @@
     </style>
 </head>
 <body>
+    <div id="loginModal">
+        <div>
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <h2>Sign Up</h2>
+            <input type="text" id="signupUsername" placeholder="Username">
+            <input type="text" id="signupHandle" placeholder="Handle (e.g., @User)">
+            <input type="password" id="signupPassword" placeholder="Password">
+            <button onclick="signup()">Sign Up</button>
+        </div>
+    </div>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-dove"></i><span>AFCOlite</span></div>
             <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i><span>Home</span></div>
@@ -318,17 +417,23 @@
             <div class="sidebar-item" onclick="showPage('profile')"><i class="fas fa-user"></i><span>Profile</span></div>
             <div class="sidebar-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
         </div>
-
-        <!-- Main Content -->
         <div class="main-content">
             <div class="header" id="header">Home</div>
             <div class="post-form" id="postForm">
                 <textarea id="postContent" rows="3" placeholder="What's happening?"></textarea>
                 <div class="actions">
                     <div>
+                        <i class="fas fa-dove" onclick="toggleStickerPicker('postStickerPicker')"></i>
                         <i class="fas fa-image"></i>
                         <i class="fas fa-video"></i>
                         <i class="fas fa-poll"></i>
+                        <div class="sticker-picker" id="postStickerPicker">
+                            <span onclick="addSticker('postContent', '🕊️')">🕊️</span>
+                            <span onclick="addSticker('postContent', '🦜')">🦜</span>
+                            <span onclick="addSticker('postContent', '🦅')">🦅</span>
+                            <span onclick="addSticker('postContent', '🐦')">🐦</span>
+                            <span onclick="addSticker('postContent', '🦢')">🦢</span>
+                        </div>
                     </div>
                     <button onclick="createPost()">Post</button>
                 </div>
@@ -341,24 +446,116 @@
             <div class="posts" id="postsContainer"></div>
         </div>
     </div>
-
     <script>
         // JSONBin.io Configuration
-        const JSONBIN_BIN_ID = '684adcbb8960c979a5a89f8b'; // Replace with your JSONBin Bin ID
-        const JSONBIN_X_MASTER_KEY = '$2a$10$47gr4/kwbou3AGBRxw0ezuwkGNmHgdjGK1kd2dfMAoNgqtqyscdoG'; // Replace with your JSONBin X-Master-Key
+        const JSONBIN_BIN_ID = '684adcbb8960c979a5a89f8b';
+        const JSONBIN_X_MASTER_KEY = '$2a$10$47gr4/kwbou3AGBRxw0ezuwkGNmHgdjGK1kd2dfMAoNgqtqyscdoG';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-        // Mock user data
-        const currentUser = {
-            username: 'User',
-            handle: '@User',
-            profilePic: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-            bio: 'Welcome to AFCOlite!',
-            joined: 'June 2025'
-        };
+        // Default profile picture (donation-themed)
+        const DEFAULT_PROFILE_PIC = 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+
+
+        // Get current user from localStorage
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        // Show login modal if not logged in
+        if (!currentUser) {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        // Login function
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!username || !password) {
+                alert('Please enter username and password.');
+                return;
+            }
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const users = data.record.users || [];
+                const user = users.find(u => u.username === username && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    document.getElementById('loginModal').style.display = 'none';
+                    showPage('home');
+                } else {
+                    alert('Invalid username or password.');
+                }
+            } catch (error) {
+                console.error('Error logging in:', error);
+                alert('Failed to log in. Please try again.');
+            }
+        }
+
+        // Signup function
+        async function signup() {
+            const username = document.getElementById('signupUsername').value.trim();
+            const handle = document.getElementById('signupHandle').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            if (!username || !handle || !password) {
+                alert('Please fill all fields.');
+                return;
+            }
+            if (!handle.startsWith('@')) {
+                alert('Handle must start with @.');
+                return;
+            }
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const users = data.record.users || [];
+                if (users.find(u => u.username === username)) {
+                    alert('Username already exists.');
+                    return;
+                }
+                if (users.find(u => u.handle === handle)) {
+                    alert('Handle already exists.');
+                    return;
+                }
+
+                const newUser = {
+                    username,
+                    handle,
+                    password,
+                    profilePic: DEFAULT_PROFILE_PIC,
+                    bio: 'Welcome to AFCOlite! 🕊️',
+                    joined: new Date().toLocaleDateString(),
+                    verified: false
+                };
+                users.push(newUser);
+
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_X_MASTER_KEY
+                    },
+                    body: JSON.stringify({ ...data.record, users })
+                });
+
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                document.getElementById('loginModal').style.display = 'none';
+                showPage('home');
+            } catch (error) {
+                console.error('Error signing up:', error);
+                alert('Failed to sign up. Please try again.');
+            }
+        }
 
         // Page navigation
         function showPage(page) {
+            if (!currentUser) return;
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
             document.querySelector(`.sidebar-item[onclick="showPage('${page}')"]`).classList.add('active');
             document.getElementById('header').textContent = page.charAt(0).toUpperCase() + page.slice(1);
@@ -381,10 +578,11 @@
                 });
                 const data = await response.json();
                 let posts = data.record.posts || [];
+                const users = data.record.users || [];
                 if (filter) {
                     posts = posts.filter(post => post.content.toLowerCase().includes(filter.toLowerCase()));
                 }
-                displayPosts(posts);
+                displayPosts(posts, users);
             } catch (error) {
                 console.error('Error fetching posts:', error);
                 alert('Failed to load posts.');
@@ -392,17 +590,18 @@
         }
 
         // Display posts
-        function displayPosts(posts) {
+        function displayPosts(posts, users) {
             const postsContainer = document.getElementById('postsContainer');
             postsContainer.innerHTML = '';
             posts.reverse().forEach(post => {
+                const user = users.find(u => u.username === post.username) || { verified: false };
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
                 postElement.innerHTML = `
                     <div class="post-header">
-                        <img src="${post.profilePic}" alt="Profile Pic">
+                        <img src="${post.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
                         <div>
-                            <span class="username">${post.username}</span>
+                            <span class="username">${post.username}${user.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</span>
                             <span class="handle">${post.handle}</span>
                         </div>
                     </div>
@@ -416,19 +615,30 @@
                     <div class="comment-section" id="commentSection${post.id}" style="display: none;">
                         <div class="comment-form">
                             <input type="text" id="commentInput${post.id}" placeholder="Add a comment...">
+                            <i class="fas fa-dove" onclick="toggleStickerPicker('commentStickerPicker${post.id}')"></i>
+                            <div class="sticker-picker" id="commentStickerPicker${post.id}">
+                                <span onclick="addSticker('commentInput${post.id}', '🕊️')">🕊️</span>
+                                <span onclick="addSticker('commentInput${post.id}', '🦜')">🦜</span>
+                                <span onclick="addSticker('commentInput${post.id}', '🦅')">🦅</span>
+                                <span onclick="addSticker('commentInput${post.id}', '🐦')">🐦</span>
+                                <span onclick="addSticker('commentInput${post.id}', '🦢')">🦢</span>
+                            </div>
                             <button onclick="addComment('${post.id}')">Comment</button>
                         </div>
-                        ${post.comments.map(comment => `
-                            <div class="comment">
-                                <img src="${comment.profilePic}" alt="Profile Pic">
-                                <div class="comment-content">
-                                    <span class="username">${comment.username}</span>
-                                    <span class="handle">${comment.handle}</span>
-                                    <p>${comment.content}</p>
-                                    <span class="post-meta">${new Date(comment.timestamp).toLocaleString()}</span>
+                        ${post.comments.map(comment => {
+                            const commentUser = users.find(u => u.username === comment.username) || { verified: false };
+                            return `
+                                <div class="comment">
+                                    <img src="${comment.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
+                                    <div class="comment-content">
+                                        <span class="username">${comment.username}${commentUser.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</span>
+                                        <span class="handle">${comment.handle}</span>
+                                        <p>${comment.content}</p>
+                                        <span class="post-meta">${new Date(comment.timestamp).toLocaleString()}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 `;
                 postsContainer.appendChild(postElement);
@@ -447,7 +657,7 @@
                 id: Date.now().toString(),
                 username: currentUser.username,
                 handle: currentUser.handle,
-                profilePic: currentUser.profilePic,
+                profilePic: DEFAULT_PROFILE_PIC,
                 content: postContent,
                 timestamp: new Date().toISOString(),
                 likes: [],
@@ -483,6 +693,7 @@
                 });
 
                 document.getElementById('postContent').value = '';
+                document.getElementById('postStickerPicker').style.display = 'none';
                 fetchPosts();
             } catch (error) {
                 console.error('Error creating post:', error);
@@ -506,7 +717,7 @@
                         const notification = {
                             id: Date.now().toString(),
                             type: 'like',
-                            user: currentUser.username,
+                            user: newUser.username,
                             content: `${currentUser.username} liked a post.`,
                             timestamp: new Date().toISOString()
                         };
@@ -599,7 +810,7 @@
             const newComment = {
                 username: currentUser.username,
                 handle: currentUser.handle,
-                profilePic: currentUser.profilePic,
+                profilePic: DEFAULT_PROFILE_PIC,
                 content,
                 timestamp: new Date().toISOString()
             };
@@ -631,6 +842,7 @@
                         body: JSON.stringify({ posts, users: data.record.users || [], notifications })
                     });
                     commentInput.value = '';
+                    document.getElementById(`commentStickerPicker${postId}`).style.display = 'none';
                     fetchPosts();
                 }
             } catch (error) {
@@ -682,24 +894,34 @@
                 const profileContainer = document.getElementById('profile');
                 profileContainer.innerHTML = `
                     <div class="profile-header">
-                        <img src="${currentUser.profilePic}" alt="Profile Pic">
-                        <h2>${currentUser.username}</h2>
+                        <img src="${currentUser.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
+                        <h2>${currentUser.username}${currentUser.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</h2>
                         <p>${currentUser.handle}</p>
                         <p>${currentUser.bio}</p>
                         <p>Joined ${currentUser.joined}</p>
-                        <button onclick="alert('This action is still unavailable 🕊️ ')">Edit Profile</button>
+                        <button onclick="showEditProfileForm()">Edit Profile</button>
+                    </div>
+                    <div id="editProfileForm" style="display: none; padding: 20px;">
+                        <input type="text" id="editUsername" value="${currentUser.username}" placeholder="Username">
+                        <input type="text" id="editHandle" value="${currentUser.handle}" placeholder="Handle">
+                        <textarea id="editBio" placeholder="Bio">${currentUser.bio}</textarea>
+                        <label><input type="checkbox" id="editVerified" ${currentUser.verified ? 'checked' : ''}> Verified</label>
+                        <button onclick="updateProfile()">Save Changes</button>
+                        <button onclick="document.getElementById('editProfileForm').style.display='none'">Cancel</button>
                     </div>
                 `;
                 const postsContainer = document.createElement('div');
                 postsContainer.className = 'posts';
+                const users = data.record.users || [];
                 userPosts.reverse().forEach(post => {
+                    const user = users.find(u => u.username === post.username) || { verified: false };
                     const postElement = document.createElement('div');
                     postElement.className = 'post';
                     postElement.innerHTML = `
                         <div class="post-header">
-                            <img src="${post.profilePic}" alt="Profile Pic">
+                            <img src="${post.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
                             <div>
-                                <span class="username">${post.username}</span>
+                                <span class="username">${post.username}${user.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</span>
                                 <span class="handle">${post.handle}</span>
                             </div>
                         </div>
@@ -720,23 +942,122 @@
             }
         }
 
-        // Logout (mock)
+        // Show edit profile form
+        function showEditProfileForm() {
+            document.getElementById('editProfileForm').style.display = 'block';
+        }
+
+        // Update profile
+        async function updateProfile() {
+            const username = document.getElementById('editUsername').value.trim();
+            const handle = document.getElementById('editHandle').value.trim();
+            const bio = document.getElementById('editBio').value.trim();
+            const verified = document.getElementById('editVerified').checked;
+
+            if (!username || !handle) {
+                alert('Username and handle are required.');
+                return;
+            }
+            if (!handle.startsWith('@')) {
+                alert('Handle must start with @.');
+                return;
+            }
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+                });
+                const data = await response.json();
+                const users = data.record.users || [];
+                const posts = data.record.posts || [];
+
+                // Check for conflicts
+                if (users.find(u => u.username === username && u.username !== currentUser.username)) {
+                    alert('Username already exists.');
+                    return;
+                }
+                if (users.find(u => u.handle === handle && u.handle !== currentUser.handle)) {
+                    alert('Handle already exists.');
+                    return;
+                }
+
+                // Update user
+                const userIndex = users.findIndex(u => u.username === currentUser.username);
+                const oldUsername = currentUser.username;
+                const oldHandle = currentUser.handle;
+                currentUser = { ...currentUser, username, handle, bio, profilePic: DEFAULT_PROFILE_PIC, verified };
+                users[userIndex] = currentUser;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                // Update posts and comments
+                posts.forEach(post => {
+                    if (post.username === oldUsername) {
+                        post.username = username;
+                        post.handle = handle;
+                        post.profilePic = DEFAULT_PROFILE_PIC;
+                    }
+                    post.comments.forEach(comment => {
+                        if (comment.username === oldUsername) {
+                            comment.username = username;
+                            comment.handle = handle;
+                            comment.profilePic = DEFAULT_PROFILE_PIC;
+                        }
+                    });
+                });
+
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_X_MASTER_KEY
+                    },
+                    body: JSON.stringify({ ...data.record, users, posts })
+                });
+
+                document.getElementById('editProfileForm').style.display = 'none';
+                showProfile();
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile.');
+            }
+        }
+
+        // Toggle sticker picker
+        function toggleStickerPicker(pickerId) {
+            const picker = document.getElementById(pickerId);
+            picker.style.display = picker.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Add sticker to input
+        function addSticker(inputId, sticker) {
+            const input = document.getElementById(inputId);
+            input.value += sticker;
+            input.focus();
+            document.querySelectorAll('.sticker-picker').forEach(picker => picker.style.display = 'none');
+        }
+
+        // Logout
         function logout() {
-            alert('This action is still unavailable 🕊️.');
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('postsContainer').innerHTML = '';
         }
 
         // Periodic refresh
         setInterval(() => {
-            if (document.getElementById('postsContainer').style.display === 'block') {
+            if (currentUser && document.getElementById('postsContainer').style.display === 'block') {
                 fetchPosts(document.getElementById('searchInput')?.value || '');
             }
-            if (document.getElementById('notifications').style.display === 'block') {
+            if (currentUser && document.getElementById('notifications').style.display === 'block') {
                 fetchNotifications();
             }
         }, 30000);
 
         // Initial load
-        showPage('home');
+        if (currentUser) {
+            showPage('home');
+        }
     </script>
 </body>
 </html>
@@ -762,7 +1083,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(21, 32, 43, 0.95); /* Dark Twitter style */
+      background-color: rgba(21, 32, 43, 0.95);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -772,7 +1093,7 @@
     .popup-content {
       background-color: #15202b;
       color: #ffffff;
-      padding: 20px;
+      padding: 25px;
       border-radius: 16px;
       max-width: 500px;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
@@ -780,24 +1101,25 @@
     }
 
     .popup-content h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 26px;
+      margin-bottom: 15px;
     }
 
     .popup-content p {
       font-size: 16px;
-      margin-bottom: 20px;
-      line-height: 1.5;
+      margin-bottom: 25px;
+      line-height: 1.6;
     }
 
     .close-btn {
       background-color: #1da1f2;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: bold;
       transition: background-color 0.3s;
     }
 
@@ -810,25 +1132,24 @@
 
 <div id="afcolitePopup" style="display:none;">
   <div class="popup-content">
-    <h2>Welcome to AFCOlite</h2>
+    <h2>Welcome to AFCOlite 🕊️</h2>
     <p>
-      A digital blog platform powered by Al Falah Charity Organization (AFCO).<br><br>
-      To protect user privacy, all usernames and profile pictures are intentionally identical.<br>
-      This ensures a fully anonymous and secure messaging experience.<br><br>
-      Thank you for being part of a safe and supportive space.
+      Your new community platform by Al Falah Charity Organization.<br><br>
+      Connect, share, and engage in meaningful discussions in a safe digital space.<br><br>
+      Sign up now to join our growing community and experience compassionate social networking.
     </p>
-    <button class="close-btn" onclick="closePopup()">Got it</button>
+    <button class="close-btn" onclick="closePopup()">Let's Begin</button>
   </div>
 </div>
 
 <script>
   function closePopup() {
     document.getElementById('afcolitePopup').style.display = 'none';
-    localStorage.setItem('afcolite_popup_seen', 'true');
+    localStorage.setItem('afcolite_popup_seens', 'true');
   }
 
-  window.onload = function () {
-    if (!localStorage.getItem('afcolite_popup_seen')) {
+  window.onload = function() {
+    if (!localStorage.getItem('afcolite_popup_seens')) {
       document.getElementById('afcolitePopup').style.display = 'flex';
     }
   };
@@ -836,5 +1157,3 @@
 
 </body>
 </html>
-
-
