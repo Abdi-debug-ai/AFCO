@@ -1237,3 +1237,31 @@ async function toggleLike(postId) {
   window.addEventListener("click", playOnce, { once: true });
   window.addEventListener("touchstart", playOnce, { once: true });
 </script>
+
+<audio id="bg-audio" style="display: none">
+  <source src="/Audio/Intro.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const audio = document.getElementById("bg-audio");
+  audio.volume = 0.3;
+
+  function playOnce() {
+    // Ensure it starts from beginning
+    audio.currentTime = 0;
+
+    audio.play().then(() => {
+      // Stop after 5 seconds
+      setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }, 5000);
+    }).catch((err) => {
+      console.log("Audio playback failed:", err);
+    });
+  }
+
+  // Trigger once on first click or tap
+  window.addEventListener("click", playOnce, { once: true });
+  window.addEventListener("touchstart", playOnce, { once: true });
+</script>
