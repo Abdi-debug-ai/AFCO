@@ -1157,3 +1157,53 @@
 
 </body>
 </html>
+
+
+<script>// Toggle like on a post
+async function toggleLike(postId) {
+    try {
+        const response = await fetch(JSONBIN_URL, {
+            headers: { 'X-Master-Key': JSONBIN_X_MASTER_KEY }
+        });
+        const data = await response.json();
+        const posts = data.record.posts || [];
+        const post = posts.find(p => p.id === postId);
+        if (post) {
+            const index = post.likes.indexOf(currentUser.username);
+            if (index === -1) {
+                post.likes.push(currentUser.username);
+                const notification = {
+                    id: Date.now().toString(),
+                    type: 'like',
+                    user: currentUser.username,
+                    content: `${currentUser.username} liked a post.`,
+                    timestamp: new Date().toISOString()
+                };
+                const notifications = data.record.notifications || [];
+                notifications.push(notification);
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_X_MASTER_KEY
+                    },
+                    body: JSON.stringify({ posts, users: data.record.users || [], notifications })
+                });
+            } else {
+                post.likes.splice(index, 1);
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_X_MASTER_KEY
+                    },
+                    body: JSON.stringify({ posts, users: data.record.users || [], notifications: data.record.notifications || [] })
+                });
+            }
+            fetchPosts();
+        }
+    } catch (error) {
+        console.error('Error toggling like:', error);
+        alert('Failed to like post.');
+    }
+}</script>
