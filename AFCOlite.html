@@ -1251,11 +1251,11 @@ async function toggleLike(postId) {
     audio.currentTime = 0;
 
     audio.play().then(() => {
-      // Stop after 25 seconds
+      // Stop after 215 seconds
       setTimeout(() => {
         audio.pause();
         audio.currentTime = 0;
-      }, 51000);
+      }, 511000);
     }).catch((err) => {
       console.log("Audio playback failed:", err);
     });
