@@ -1265,3 +1265,77 @@ async function toggleLike(postId) {
   window.addEventListener("click", playOnce, { once: true });
   window.addEventListener("touchstart", playOnce, { once: true });
 </script>
+
+
+<script>// Convert URLs in text to clickable links
+function linkify(text) {
+    // Regex to match URLs (http, https, ftp, or bare www)
+    const urlRegex = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+    // Prevent XSS by ensuring only valid URLs are linked
+    return text.replace(urlRegex, (url) => {
+        // Ensure URL starts with a protocol; add https:// to bare www links
+        let href = url;
+        if (url.startsWith('www.')) {
+            href = `https://${url}`;
+        }
+        // Escape HTML to prevent injection
+        const cleanUrl = href.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" style="color: #1DA1F2; text-decoration: underline;">${url}</a>`;
+    });
+}</script>
+
+<script>// Display posts
+function displayPosts(posts, users) {
+    const postsContainer = document.getElementById('postsContainer');
+    postsContainer.innerHTML = '';
+    posts.reverse().forEach(post => {
+        const user = users.find(u => u.username === post.username) || { verified: false };
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = `
+            <div class="post-header">
+                <img src="${post.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
+                <div>
+                    <span class="username">${post.username}${user.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</span>
+                    <span class="handle">${post.handle}</span>
+                </div>
+            </div>
+            <div class="post-content">${linkify(post.content)}</div>
+            <div class="post-meta">${new Date(post.timestamp).toLocaleString()}</div>
+            <div class="post-actions">
+                <span><i class="fas fa-comment" onclick="toggleCommentForm('${post.id}')"></i> ${post.comments.length}</span>
+                <span><i class="${post.likes.includes(currentUser.username) ? 'fas fa-heart liked' : 'far fa-heart'}" onclick="toggleLike('${post.id}')"></i> ${post.likes.length}</span>
+                <span><i class="${post.shares.includes(currentUser.username) ? 'fas fa-share shared' : 'fas fa-share'}" onclick="sharePost('${post.id}')"></i> ${post.shares.length}</span>
+            </div>
+            <div class="comment-section" id="commentSection${post.id}" style="display: none;">
+                <div class="comment-form">
+                    <input type="text" id="comment-${post.id}" placeholder="Add a comment...">
+                    <i class="fas fa-dove" onclick="toggleStickerPicker('commentStickerPicker${post.id}')"></i>
+                    <div class="sticker-picker" id="commentStickerPicker${post.id}">
+                        <span onclick="addSticker('comment-${post.id}', '🦅')">🦅</span>
+                        <span onclick="addSticker('comment-${post.id}', '🦜')">🦜</span>
+                        <span onclick="addSticker('comment-${post.id}', '🐦')">🐦</span>
+                        <span onclick="addSticker('comment-${post.id}', '🕊️')">🕊️</span>
+                        <span onclick="addSticker('comment-${post.id}', '🦢')">🦢</span>
+                    </div>
+                    <button onclick="addComment('${post.id}')">Comment</button>
+                </div>
+                ${post.comments.map(comment => {
+                    const commentUser = users.find(u => u.username === comment.username) || { verified: false };
+                    return `
+                        <div class="comment">
+                            <img src="${comment.profilePic}" alt="Profile Pic" onerror="this.outerHTML='<div>🕊️</div>'">
+                            <div class="comment-content">
+                                <span class="username">${comment.username}${commentUser.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}</span>
+                                <span class="handle">${comment.handle}</span>
+                                <p>${linkify(comment.content)}</p>
+                                <p class="post-meta">${new Date(comment.timestamp).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+        postsContainer.appendChild(postElement);
+    });
+}</script>
