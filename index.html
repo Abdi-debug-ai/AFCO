@@ -2093,3 +2093,68 @@ document.getElementById("volunteerForm").addEventListener("submit", async (e) =>
 </div>
 
 
+<!-- AFCO Website Final Closure Modal -->
+<div id="popup-overlay" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 99vh;
+  background-color: #f8f8f8;
+  color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  pointer-events: all;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+">
+  <div style="
+    background: #ffffff;
+    border: 1px solid #c0392b;
+    padding: 40px 30px;
+    border-radius: 10px;
+    max-width: 620px;
+    width: 90%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  ">
+    <h2 style="font-size: 22px; margin-bottom: 20px; color: #c0392b;">
+      ⚠️ AFCO Website Closure Notice
+    </h2>
+    <p style="font-size: 15px; color: #333; line-height: 1.7;">
+      Effective immediately, the <strong>AFCO website</strong> has been permanently shut down.
+    </p>
+    <p style="font-size: 15px; color: #444; line-height: 1.7;">
+      After an extended period of low traffic and limited platform engagement, it became clear that continued maintenance of the site was not justified. Despite the tools, resources, and support made available, user participation remained minimal.
+    </p>
+    <p style="font-size: 15px; color: #333; line-height: 1.7;">
+      As a result, <strong>all website functionality has been fully disabled</strong>. No further updates, access, or services will be offered.
+    </p>
+    <p style="font-size: 14px; color: #777; margin-top: 25px;">
+      We extend our gratitude to the small number of individuals who actively engaged during its operation.
+      <br><br>
+      <strong>This is the final notice. The AFCO website is now closed.</strong>
+      <br><br>
+      <em>This tab will close in 30 seconds...</em>
+    </p>
+  </div>
+</div>
+
+<!-- Lock all interaction -->
+<style>
+  body {
+    overflow: hidden !important;
+    pointer-events: none !important;
+    background-color: #f8f8f8 !important;
+  }
+  #popup-overlay {
+    pointer-events: all !important;
+  }
+</style>
+
+<!-- Auto-close after 15 seconds -->
+<script>
+  setTimeout(() => {
+    window.open('', '_self');
+    window.close();
+  }, 30000); // 15 seconds = 15000 milliseconds
+</script>
