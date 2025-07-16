@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskNest – To-Do + Reminders</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">📝 TaskNest – To-Do + Reminders</h1>
+
+    <!-- Task Input Section -->
+    <div class="bg-white p-4 rounded shadow mb-6 grid md:grid-cols-6 gap-3">
+      <input id="taskText" type="text" placeholder="Task description"
+        class="p-2 rounded border col-span-2 border-gray-300 focus:outline-none" />
+
+      <select id="taskCategory" class="p-2 rounded border border-gray-300 focus:outline-none">
+        <option>Work</option>
+        <option>Personal</option>
+        <option>School</option>
+        <option>Health</option>
+      </select>
+
+      <select id="taskPriority" class="p-2 rounded border border-gray-300 focus:outline-none">
+        <option value="Low">🟢 Low</option>
+        <option value="Medium">🟡 Medium</option>
+        <option value="High">🔴 High</option>
+      </select>
+
+      <input id="taskDueDate" type="date" class="p-2 rounded border border-gray-300 focus:outline-none" />
+      <input id="taskDueTime" type="time" class="p-2 rounded border border-gray-300 focus:outline-none" />
+
+      <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 col-span-full md:col-span-1">Add</button>
+    </div>
+
+    <!-- Task List -->
+    <ul id="taskList" class="space-y-2 mb-6"></ul>
+
+    <!-- Export -->
+    <button onclick="downloadPDF()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      📄 Export To-Do List as PDF
+    </button>
+  </div>
+
+  <script>
+    const taskListEl = document.getElementById("taskList");
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      const text = document.getElementById("taskText").value.trim();
+      const category = document.getElementById("taskCategory").value;
+      const priority = document.getElementById("taskPriority").value;
+      const dueDate = document.getElementById("taskDueDate").value;
+      const dueTime = document.getElementById("taskDueTime").value;
+
+      if (!text) return alert("Please enter a task.");
+
+      const dueDateTime = dueDate && dueTime ? new Date(`${dueDate}T${dueTime}`) : null;
+
+      tasks.push({
+        text,
+        category,
+        priority,
+        due: dueDateTime ? dueDateTime.toISOString() : null,
+        done: false,
+        alerted: false
+      });
+
+      document.getElementById("taskText").value = "";
+      document.getElementById("taskDueDate").value = "";
+      document.getElementById("taskDueTime").value = "";
+
+      saveTasks();
+      renderTasks();
+      scheduleReminders(); // Re-schedule
+    }
+
+    function renderTasks() {
+      taskListEl.innerHTML = "";
+      const now = new Date();
+
+      tasks.forEach((task, i) => {
+        const li = document.createElement("li");
+        li.className = `flex justify-between items-start bg-white p-4 rounded shadow`;
+
+        const priorityColor = {
+          High: "text-red-500",
+          Medium: "text-yellow-500",
+          Low: "text-green-500"
+        }[task.priority];
+
+        const taskDue = task.due ? new Date(task.due) : null;
+        let dueLabel = "";
+
+        if (taskDue) {
+          if (task.done) {
+            dueLabel = "✅ Completed";
+          } else if (taskDue < now) {
+            dueLabel = "⚠️ Overdue";
+          } else if ((taskDue - now) / 60000 < 30) {
+            dueLabel = "⏰ Due Soon";
+          }
+        }
+
+        const taskHTML = `
+          <div class="flex flex-col">
+            <label class="flex items-start gap-2">
+              <input type="checkbox" onchange="toggleDone(${i})" ${task.done ? "checked" : ""} />
+              <div>
+                <span class="${task.done ? "line-through text-gray-400" : ""}">${task.text}</span>
+                <div class="text-sm text-gray-500 mt-1">
+                  📁 ${task.category} | <span class="${priorityColor} font-semibold">${task.priority}</span>
+                  ${taskDue ? `| 🗓️ ${taskDue.toLocaleString()} ${dueLabel ? "| " + dueLabel : ""}` : ""}
+                </div>
+              </div>
+            </label>
+          </div>
+          <button onclick="deleteTask(${i})" class="text-red-500 hover:text-red-700">❌</button>
+        `;
+
+        li.innerHTML = taskHTML;
+        taskListEl.appendChild(li);
+      });
+    }
+
+    function toggleDone(index) {
+      tasks[index].done = !tasks[index].done;
+      saveTasks();
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+      scheduleReminders();
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("📝 TaskNest – To-Do List", 20, 20);
+
+      let y = 30;
+      tasks.forEach((task, i) => {
+        const status = task.done ? "[✓]" : "[ ]";
+        const due = task.due ? new Date(task.due).toLocaleString() : "";
+        const line = `${status} ${task.text} (${task.category}, ${task.priority}${due ? ", Due: " + due : ""})`;
+        doc.text(line, 20, y);
+        y += 10;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save("tasknest-todo.pdf");
+    }
+
+    function scheduleReminders() {
+      tasks.forEach((task, index) => {
+        if (task.done || task.alerted || !task.due) return;
+        const now = new Date();
+        const due = new Date(task.due);
+        const timeUntil = due.getTime() - now.getTime();
+
+        if (timeUntil > 0) {
+          setTimeout(() => {
+            if (!tasks[index].done) {
+              alert(`🔔 Reminder: "${task.text}" is due now!`);
+              tasks[index].alerted = true;
+              saveTasks();
+              renderTasks();
+            }
+          }, timeUntil);
+        }
+      });
+    }
+
+    renderTasks();
+    scheduleReminders();
+  </script>
+</body>
+</html>
