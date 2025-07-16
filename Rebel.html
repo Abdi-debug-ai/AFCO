@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌍 GeoSim: World Power Game</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background-color: #1c1c1c;
+      margin: 0;
+      padding: 15px;
+      text-align: center;
+    }
+
+    #main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 10px;
+    }
+
+    .panel {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+    }
+
+    #map {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .country-card {
+      background-color: #2e2e2e;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      width: 140px;
+      transition: 0.2s;
+    }
+
+    .country-card:hover {
+      background-color: #444;
+    }
+
+    .low-stability {
+      background-color: #b22222 !important;
+    }
+
+    button {
+      margin: 5px;
+      padding: 6px 10px;
+      border: none;
+      background-color: #333;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    #events {
+      height: 200px;
+      overflow-y: auto;
+      background: #151515;
+      padding: 10px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #444;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌍 GeoSim: World Power Strategy</h1>
+
+  <div id="main">
+    <div class="panel">
+      <div class="title">Your Nation</div>
+      <div id="playerPanel">
+        <p>Select a country to begin.</p>
+      </div>
+      <div id="playerActions" style="display:none;">
+        <button onclick="collectTaxes()">💰 Collect Taxes</button>
+        <button onclick="switchCountry()">🔄 Switch Country</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="title">World Map</div>
+      <div id="map"></div>
+    </div>
+
+    <div class="panel">
+      <div class="title">Diplomatic Actions</div>
+      <div id="diplomacyPanel">Choose a country to interact with.</div>
+    </div>
+
+    <div class="panel">
+      <div class="title">📰 World Events</div>
+      <div id="events"></div>
+    </div>
+  </div>
+  <script>
+const countries = [
+  { name: "Zambara", stability: 85, military: 1000, money: 500, rebels: false, electionCooldown: 0 },
+  { name: "Korvia", stability: 90, military: 950, money: 600, rebels: false, electionCooldown: 0 },
+  { name: "Tanora", stability: 75, military: 1100, money: 450, rebels: false, electionCooldown: 0 },
+  { name: "Elyria", stability: 95, military: 1200, money: 700, rebels: false, electionCooldown: 0 },
+  { name: "Vandora", stability: 80, military: 980, money: 400, rebels: false, electionCooldown: 0 }
+];
+
+// Store relations for each country with others
+countries.forEach(c1 => {
+  c1.relations = {};
+  countries.forEach(c2 => {
+    if (c1.name !== c2.name) {
+      c1.relations[c2.name] = Math.floor(Math.random() * 101) - 50; // -50 to +50
+    }
+  });
+});
+
+let currentPlayer = null;
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+function gameTick() {
+  countries.forEach(country => {
+    // 📉 Stability Decay
+    country.stability -= Math.random() * 2;
+
+    // 💰 Passive Income
+    country.money += Math.floor(country.military / 50);
+
+    // 🗳️ Election if unstable
+    if (country.stability < 40 && country.electionCooldown <= 0 && !country.rebels) {
+      triggerElection(country);
+    }
+
+    // Cooldowns
+    if (country.electionCooldown > 0) country.electionCooldown--;
+
+    // 🔥 Rebels Spread
+    if (country.rebels && Math.random() < 0.2) {
+      country.stability -= 5;
+      logEvent(`⚔️ Rebels destabilize ${country.name}!`);
+    }
+
+    // 💥 Rebels may start
+    if (country.stability < 30 && !country.rebels && Math.random() < 0.2) {
+      country.rebels = true;
+      logEvent(`🚨 Rebellion begins in ${country.name}!`);
+    }
+  });
+
+  renderMap();
+  renderPlayerPanel();
+}
+
+function triggerElection(country) {
+  const result = Math.random();
+  country.electionCooldown = 10; // Wait 10 ticks before next
+  if (result < 0.5) {
+    logEvent(`🗳️ ${country.name} held elections. New leader restored peace.`);
+    country.stability += 15;
+    country.money += 50;
+  } else {
+    logEvent(`❌ Elections in ${country.name} failed. Chaos erupts.`);
+    country.stability -= 10;
+    country.rebels = true;
+  }
+}
+
+function renderMap() {
+  const map = document.getElementById("map");
+  map.innerHTML = "";
+
+  countries.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "country-card";
+    if (c.stability < 40) div.classList.add("low-stability");
+
+    div.innerHTML = `
+      <strong>${c.name}</strong><br>
+      💬 Stability: ${Math.floor(c.stability)}<br>
+      🪖 Army: ${c.military}<br>
+      💰 Money: $${c.money}<br>
+      ${c.rebels ? "⚔️ Rebels active" : ""}
+    `;
+
+    div.onclick = () => {
+      currentPlayer = c;
+      document.getElementById("playerActions").style.display = "block";
+      renderPlayerPanel();
+      renderDiplomacy();
+    };
+
+    map.appendChild(div);
+  });
+}
+
+function renderPlayerPanel() {
+  const panel = document.getElementById("playerPanel");
+
+  if (!currentPlayer) {
+    panel.innerHTML = "<p>Select a country to begin playing.</p>";
+    return;
+  }
+
+  panel.innerHTML = `
+    <strong>${currentPlayer.name}</strong><br>
+    📉 Stability: ${Math.floor(currentPlayer.stability)}<br>
+    💰 Money: $${currentPlayer.money}<br>
+    🪖 Army: ${currentPlayer.military}<br>
+    ${currentPlayer.rebels ? "⚔️ Rebels are active<br>" : ""}
+  `;
+}
+
+function logEvent(msg) {
+  const eDiv = document.getElementById("events");
+  const line = document.createElement("div");
+  line.innerText = `🕒 ${new Date().toLocaleTimeString()}: ${msg}`;
+  eDiv.prepend(line);
+}
+renderMap();
+setInterval(gameTick, 4000); // Every 4 seconds
+
+</script>
+
+<script>function renderDiplomacy() {
+  const panel = document.getElementById("diplomacyPanel");
+  if (!currentPlayer) {
+    panel.innerHTML = "Choose a country to interact with.";
+    return;
+  }
+
+  let html = "";
+  countries.forEach(other => {
+    if (other.name === currentPlayer.name) return;
+
+    const relation = currentPlayer.relations[other.name] ?? 0;
+    html += `
+      <div>
+        <strong>${other.name}</strong><br>
+        🧭 Relation: ${relation}<br>
+        <button onclick="sendAid('${other.name}')">🤝 Send Aid (-$100)</button>
+        <button onclick="spyOn('${other.name}')">🕵️ Spy (-$50)</button>
+        <button onclick="threaten('${other.name}')">🚫 Threaten</button>
+        <hr>
+      </div>
+    `;
+  });
+
+  panel.innerHTML = html;
+}
+
+function sendAid(targetName) {
+  if (currentPlayer.money < 100) {
+    logEvent("💸 Not enough money to send aid.");
+    return;
+  }
+
+  currentPlayer.money -= 100;
+  currentPlayer.relations[targetName] += 15;
+
+  const target = countries.find(c => c.name === targetName);
+  target.relations[currentPlayer.name] += 10;
+
+  logEvent(`🤝 ${currentPlayer.name} sent aid to ${targetName}.`);
+  renderDiplomacy();
+  renderPlayerPanel();
+}
+
+function spyOn(targetName) {
+  if (currentPlayer.money < 50) {
+    logEvent("🪙 Not enough funds to send spies.");
+    return;
+  }
+
+  currentPlayer.money -= 50;
+  const chance = Math.random();
+  const target = countries.find(c => c.name === targetName);
+
+  if (chance < 0.5) {
+    logEvent(`🕵️ ${currentPlayer.name} successfully gathered intelligence on ${targetName}.`);
+  } else {
+    logEvent(`🚫 ${targetName} caught your spies!`);
+    currentPlayer.relations[targetName] -= 10;
+    target.relations[currentPlayer.name] -= 10;
+  }
+
+  renderDiplomacy();
+  renderPlayerPanel();
+}
+
+function threaten(targetName) {
+  const target = countries.find(c => c.name === targetName);
+  const chance = Math.random();
+
+  if (chance < 0.3) {
+    logEvent(`😡 ${targetName} is angered by ${currentPlayer.name}'s threats!`);
+    currentPlayer.relations[targetName] -= 15;
+    target.relations[currentPlayer.name] -= 15;
+  } else {
+    logEvent(`😨 ${targetName} is intimidated by ${currentPlayer.name}.`);
+    currentPlayer.relations[targetName] += 5;
+    target.relations[currentPlayer.name] -= 5;
+  }
+
+  renderDiplomacy();
+  renderPlayerPanel();
+}
+</script>
+
+<script>function randomGlobalEvent() {
+  const roll = Math.random();
+  if (roll < 0.2) {
+    // 🌊 Flood disaster
+    const victim = countries[Math.floor(Math.random() * countries.length)];
+    victim.stability -= 15;
+    logEvent(`🌊 Major flooding hits ${victim.name}. Stability drops.`);
+  } else if (roll < 0.4) {
+    // 🌍 UN peace summit
+    countries.forEach(c => {
+      for (let name in c.relations) {
+        c.relations[name] += 5;
+      }
+    });
+    logEvent(`🕊️ A global peace summit improves international relations.`);
+  } else if (roll < 0.6) {
+    // ⚠️ Oil crisis
+    const victim = countries[Math.floor(Math.random() * countries.length)];
+    victim.money -= 100;
+    logEvent(`⛽ Oil crisis strikes ${victim.name}. Economy suffers.`);
+  } else if (roll < 0.8) {
+    // 🧠 Technology boom
+    const lucky = countries[Math.floor(Math.random() * countries.length)];
+    lucky.money += 200;
+    logEvent(`💻 ${lucky.name} experiences a tech boom! Economy grows.`);
+  } else {
+    // 🏃 Refugee wave
+    const from = countries[Math.floor(Math.random() * countries.length)];
+    const to = countries.find(c => c.name !== from.name);
+    from.stability -= 10;
+    to.stability -= 5;
+    logEvent(`🚨 Refugee wave from ${from.name} to ${to.name} creates instability.`);
+  }
+}
+function aiDecisions() {
+  countries.forEach(c => {
+    if (currentPlayer && c.name === currentPlayer.name) return;
+
+    for (let otherName in c.relations) {
+      const relation = c.relations[otherName];
+      const target = countries.find(n => n.name === otherName);
+
+      // 🛡️ Help allies
+      if (relation > 30 && target.rebels && Math.random() < 0.3) {
+        target.stability += 5;
+        logEvent(`🛡️ ${c.name} sent aid to ally ${target.name} to stop rebellion.`);
+      }
+
+      // 💣 Harm enemies
+      if (relation < -30 && !target.rebels && Math.random() < 0.3) {
+        target.stability -= 10;
+        logEvent(`💣 ${c.name} secretly funded unrest in ${target.name}.`);
+        if (target.stability < 30 && !target.rebels) {
+          target.rebels = true;
+          logEvent(`🔥 Rebellion starts in ${target.name} due to foreign sabotage.`);
+        }
+      }
+    }
+  });
+}
+  if (Math.random() < 0.3) randomGlobalEvent(); // 30% chance per tick
+  aiDecisions();
+
+</script>
