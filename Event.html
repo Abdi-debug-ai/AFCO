@@ -636,374 +636,388 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Event Manager Class
-            class EventManager {
-                constructor() {
-                    this.events = this.getEventData();
-                    this.currentFilter = 'all';
-                    this.currentView = 'list';
-                    this.searchTerm = '';
-                    
-                    // DOM elements
-                    this.elements = {
-                        eventsList: document.getElementById('events-list'),
-                        calendarView: document.getElementById('calendar-view'),
-                        filterButtons: document.querySelectorAll('.filter-btn'),
-                        viewAllBtn: document.getElementById('view-all-btn'),
-                        listViewBtn: document.getElementById('list-view-btn'),
-                        calendarViewBtn: document.getElementById('calendar-view-btn'),
-                        searchInput: document.getElementById('events-search')
-                    };
-                    
-                    // Initialize
-                    this.initEventListeners();
-                    this.renderEvents();
-                }
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event Manager Class
+        class EventManager {
+            constructor() {
+                this.events = this.getEventData();
+                this.currentFilter = 'all';
+                this.currentView = 'list';
+                this.searchTerm = '';
+                this.currentMonth = new Date().getMonth();
+                this.currentYear = new Date().getFullYear();
                 
-                getEventData() {
-                    return [
-                        {
-                            id: 1,
-                            title: "Annual General Meeting",
-                            date: new Date(2025, 6, 1),
-                            time: "9:00 PM - 11:00 PM",
-                            location: "Virtual ",
-                            description: "Our quarterly general meeting where we discuss organization progress and future plans. All members are required to attend.",
-                            status: "completed",
-                            actions: ["agenda", "minutes"]
-                        },
-                        {
-                            id: 2,
-                           title: "Orphanage Visit ",
-                            date: new Date(2025, 7, 16),
-                            time: "8:00 AM - 12:00 PM",
-                            location: "Al Kheiriya orphanage, Isiolo ",
-                            description: "Orphanage visit to Al kheiriya with supplies for Young kids.",
-                            status: "upcoming",
-                            actions: ["register", "remind"],
-                            isNew: true
-                        },
-                        {
-                            id: 3,
-                            title: "Preparation for orphanage visit",
-                    date: new Date(2025, 7, 14),
-                            time: "9:00 PM - 10:00 PM",
-                            location: "Virtual",
-                            description: "preparation of the oncoming orphanage visit.",
-                            status: "upcoming",
-                            actions: ["register", "details"]
-                        },
-                        {
-                            id: 4,
-                            title: "Organization Launch",
-                            date: new Date(2025, 6, 25),
-                            time: "10:00 AM - 12:00 PM",
-                            location: "Google Meet",
-                            description: "Planning and executing our official organization launch events.",
-                            status: "ongoing",
-                            actions: ["join", "details"]
-                        },
-                        {
-                            id: 5,
-                            title: "Members meeting ",
-                            date: new Date(2023, 8, 10),
-                            time: "9:00 PM - 10:00 PM",
-                            location: "Virtual",
-                            description: "Planning for next projects.",
-                            status: "upcoming",
-                            actions: ["register", "details"]
-                        }
-                    ];
-                }
+                // DOM elements
+                this.elements = {
+                    eventsList: document.getElementById('events-list'),
+                    calendarView: document.getElementById('calendar-view'),
+                    filterButtons: document.querySelectorAll('.filter-btn'),
+                    viewAllBtn: document.getElementById('view-all-btn'),
+                    listViewBtn: document.getElementById('list-view-btn'),
+                    calendarViewBtn: document.getElementById('calendar-view-btn'),
+                    searchInput: document.getElementById('events-search')
+                };
                 
-                initEventListeners() {
-                    // Filter buttons
-                    this.elements.filterButtons.forEach(button => {
-                        button.addEventListener('click', () => {
-                            this.elements.filterButtons.forEach(btn => {
-                                btn.classList.remove('active');
-                                btn.setAttribute('aria-pressed', 'false');
-                            });
-                            
-                            button.classList.add('active');
-                            button.setAttribute('aria-pressed', 'true');
-                            this.currentFilter = button.dataset.filter;
-                            this.renderEvents();
+                // Initialize
+                this.initEventListeners();
+                this.renderEvents();
+            }
+            
+            getEventData() {
+                return [
+                    {
+                        id: 1,
+                        title: "Annual General Meeting",
+                        date: new Date(2025, 6, 1),
+                        time: "9:00 PM - 11:00 PM",
+                        location: "Virtual",
+                        description: "Our quarterly general meeting where we discuss organization progress and future plans. All members are required to attend.",
+                        status: "completed",
+                        actions: ["agenda", "minutes"]
+                    },
+                    {
+                        id: 2,
+                        title: "Orphanage Visit",
+                        date: new Date(2025, 7, 16),
+                        time: "8:00 AM - 12:00 PM",
+                        location: "Al Kheiriya orphanage, Isiolo",
+                        description: "Orphanage visit to Al kheiriya with supplies for Young kids.",
+                        status: "upcoming",
+                        actions: ["register", "remind"],
+                        isNew: true
+                    },
+                    {
+                        id: 3,
+                        title: "Preparation for orphanage visit",
+                        date: new Date(2025, 7, 14),
+                        time: "9:00 PM - 10:00 PM",
+                        location: "Virtual",
+                        description: "preparation of the oncoming orphanage visit.",
+                        status: "upcoming",
+                        actions: ["register", "details"]
+                    },
+                    {
+                        id: 4,
+                        title: "Organization Launch",
+                        date: new Date(2025, 6, 25),
+                        time: "10:00 AM - 12:00 PM",
+                        location: "Google Meet",
+                        description: "Planning and executing our official organization launch events.",
+                        status: "ongoing",
+                        actions: ["join", "details"]
+                    },
+                    {
+                        id: 5,
+                        title: "Members meeting",
+                        date: new Date(2025, 8, 10), // Fixed year to 2025
+                        time: "9:00 PM - 10:00 PM",
+                        location: "Virtual",
+                        description: "Planning for next projects.",
+                        status: "upcoming",
+                        actions: ["register", "details"]
+                    }
+                ];
+            }
+            
+            initEventListeners() {
+                // Filter buttons
+                this.elements.filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.elements.filterButtons.forEach(btn => {
+                            btn.classList.remove('active');
+                            btn.setAttribute('aria-pressed', 'false');
                         });
-                    });
-                    
-                    // View all button
-                    this.elements.viewAllBtn.addEventListener('click', () => {
-                        // In a real app, this would navigate to a full events page
-                        console.log('Redirecting to full events calendar...');
-                    });
-                    
-                    // View toggle buttons
-                    this.elements.listViewBtn.addEventListener('click', () => {
-                        this.switchView('list');
-                    });
-                    
-                    this.elements.calendarViewBtn.addEventListener('click', () => {
-                        this.switchView('calendar');
-                    });
-                    
-                    // Search input
-                    this.elements.searchInput.addEventListener('input', (e) => {
-                        this.searchTerm = e.target.value.toLowerCase();
+                        
+                        button.classList.add('active');
+                        button.setAttribute('aria-pressed', 'true');
+                        this.currentFilter = button.dataset.filter;
                         this.renderEvents();
                     });
-                }
+                });
                 
-                switchView(view) {
-                    this.currentView = view;
-                    
-                    if (view === 'list') {
-                        this.elements.listViewBtn.classList.add('active');
-                        this.elements.calendarViewBtn.classList.remove('active');
-                        this.elements.eventsList.style.display = 'grid';
-                        this.elements.calendarView.style.display = 'none';
-                    } else {
-                        this.elements.calendarViewBtn.classList.add('active');
-                        this.elements.listViewBtn.classList.remove('active');
-                        this.elements.eventsList.style.display = 'none';
-                        this.elements.calendarView.style.display = 'block';
-                        this.renderCalendar();
-                    }
-                }
+                // View all button
+                this.elements.viewAllBtn?.addEventListener('click', () => {
+                    console.log('Redirecting to full events calendar...');
+                });
                 
-                getFilteredEvents() {
-                    let filtered = this.events;
-                    
-                    // Apply status filter
-                    if (this.currentFilter !== 'all') {
-                        filtered = filtered.filter(event => event.status === this.currentFilter);
-                    }
-                    
-                    // Apply search filter
-                    if (this.searchTerm) {
-                        filtered = filtered.filter(event => 
-                            event.title.toLowerCase().includes(this.searchTerm) || 
-                            event.description.toLowerCase().includes(this.searchTerm) ||
-                            event.location.toLowerCase().includes(this.searchTerm)
-                        );
-                    }
-                    
-                    return filtered;
-                }
+                // View toggle buttons
+                this.elements.listViewBtn.addEventListener('click', () => {
+                    this.switchView('list');
+                });
                 
-                renderEvents() {
-                    const filteredEvents = this.getFilteredEvents();
-                    
-                    if (filteredEvents.length === 0) {
-                        this.elements.eventsList.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-times"></i>
-                                <p>No ${this.currentFilter} events found</p>
-                            </div>
-                        `;
-                        return;
-                    }
-                    
-                    this.elements.eventsList.innerHTML = '';
-                    
-                    filteredEvents.forEach(event => {
-                        const eventCard = this.createEventCard(event);
-                        this.elements.eventsList.appendChild(eventCard);
-                    });
-                }
+                this.elements.calendarViewBtn.addEventListener('click', () => {
+                    this.switchView('calendar');
+                });
                 
-                createEventCard(event) {
-                    const day = event.date.getDate();
-                    const suffix = this.getOrdinalSuffix(day);
-                    const month = this.formatMonth(event.date);
-                    
-                    const statusClass = `status-${event.status}`;
-                    const statusText = this.capitalizeFirstLetter(event.status);
-                    
-                    const eventCard = document.createElement('div');
-                    eventCard.className = `event-card ${event.isNew ? 'new-event' : ''}`;
-                    eventCard.tabIndex = 0;
-                    eventCard.setAttribute('role', 'button');
-                    eventCard.setAttribute('aria-label', `Event: ${event.title}`);
-                    
-                    eventCard.innerHTML = `
-                        <div class="event-date" style="background: ${this.getDateBackgroundColor(event.status)}; color: ${this.getDateTextColor(event.status)};">
-                            <div class="day">${day}</div>
-                            <div class="month">${month}</div>
-                        </div>
-                        <div class="event-details">
-                            <h3 class="event-title">${event.title}</h3>
-                            <div class="event-location">
-                                <i class="fas fa-map-marker-alt"></i>
-                                ${event.location}
-                            </div>
-                            <div class="event-time">
-                                <i class="far fa-clock"></i>
-                                ${event.time}
-                            </div>
-                            <p class="event-description">${event.description}</p>
-                            <span class="event-status ${statusClass}">${statusText}</span>
-                            <div class="event-actions">
-                                ${event.actions.map(action => `
-                                    <button class="action-btn ${action === 'register' || action === 'join' ? 'btn-primary' : 'btn-outline'}" aria-label="${action} ${event.title}">
-                                        ${this.getActionIcon(action)} ${this.capitalizeFirstLetter(action)}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `;
-                    
-                    return eventCard;
-                }
+                // Search input
+                this.elements.searchInput.addEventListener('input', (e) => {
+                    this.searchTerm = e.target.value.toLowerCase();
+                    this.renderEvents();
+                });
+            }
+            
+            switchView(view) {
+                this.currentView = view;
                 
-                renderCalendar() {
-                    const now = new Date();
-                    const currentMonth = now.getMonth();
-                    const currentYear = now.getFullYear();
-                    
-                    // Get first day of month and total days in month
-                    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-                    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-                    
-                    // Get events for this month
-                    const monthEvents = this.events.filter(event => 
-                        event.date.getMonth() === currentMonth && 
-                        event.date.getFullYear() === currentYear
-                    );
-                    
-                    // Generate calendar HTML
-                    let calendarHTML = `
-                        <div class="calendar-header">
-                            <div class="calendar-nav">
-                                <button class="action-btn btn-outline" id="prev-month">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button class="action-btn btn-outline" id="next-month">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                            <h3 class="calendar-title">${now.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
-                        </div>
-                        <div class="calendar-grid">
-                            <div class="calendar-day-header">Sun</div>
-                            <div class="calendar-day-header">Mon</div>
-                            <div class="calendar-day-header">Tue</div>
-                            <div class="calendar-day-header">Wed</div>
-                            <div class="calendar-day-header">Thu</div>
-                            <div class="calendar-day-header">Fri</div>
-                            <div class="calendar-day-header">Sat</div>
-                    `;
-                    
-                    // Add empty cells for days before the first day of month
-                    for (let i = 0; i < firstDay; i++) {
-                        calendarHTML += `<div class="calendar-day empty"></div>`;
-                    }
-                    
-                    // Add days of month
-                    for (let day = 1; day <= daysInMonth; day++) {
-                        const date = new Date(currentYear, currentMonth, day);
-                        const dayEvents = monthEvents.filter(event => event.date.getDate() === day);
-                        
-                        calendarHTML += `<div class="calendar-day" data-date="${date.toISOString()}">`;
-                        calendarHTML += `<div class="calendar-day-number">${day}</div>`;
-                        
-                        dayEvents.forEach(event => {
-                            calendarHTML += `
-                                <div class="calendar-event" style="background: ${this.getDateBackgroundColor(event.status)}; color: ${this.getDateTextColor(event.status)};" 
-                                     data-event-id="${event.id}" title="${event.title}">
-                                    ${event.time} - ${event.title}
-                                </div>
-                            `;
-                        });
-                        
-                        calendarHTML += `</div>`;
-                    }
-                    
-                    calendarHTML += `</div>`;
-                    this.elements.calendarView.innerHTML = calendarHTML;
-                    
-                    // Add event listeners for calendar navigation
-                    document.getElementById('prev-month').addEventListener('click', () => {
-                        console.log('Previous month clicked');
-                        // In a full implementation, this would update the calendar view
-                    });
-                    
-                    document.getElementById('next-month').addEventListener('click', () => {
-                        console.log('Next month clicked');
-                        // In a full implementation, this would update the calendar view
-                    });
-                    
-                    // Add event listeners for calendar events
-                    document.querySelectorAll('.calendar-event').forEach(eventEl => {
-                        eventEl.addEventListener('click', (e) => {
-                            const eventId = parseInt(eventEl.dataset.eventId);
-                            const event = this.events.find(ev => ev.id === eventId);
-                            if (event) {
-                                alert(`Showing details for: ${event.title}`);
-                                // In a full implementation, this would show a modal with event details
-                            }
-                        });
-                    });
-                }
-                
-                // Helper methods
-                getOrdinalSuffix(day) {
-                    if (day > 3 && day < 21) return 'th';
-                    switch (day % 10) {
-                        case 1: return 'st';
-                        case 2: return 'nd';
-                        case 3: return 'rd';
-                        default: return 'th';
-                    }
-                }
-                
-                formatMonth(date) {
-                    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-                    return months[date.getMonth()];
-                }
-                
-                getDateBackgroundColor(status) {
-                    switch(status) {
-                        case 'upcoming': return 'rgba(16, 185, 129, 0.1)';
-                        case 'ongoing': return 'rgba(245, 158, 11, 0.1)';
-                        case 'completed': return 'rgba(239, 68, 68, 0.1)';
-                        default: return 'rgba(59, 130, 246, 0.1)';
-                    }
-                }
-                
-                getDateTextColor(status) {
-                    switch(status) {
-                        case 'upcoming': return '#10b981';
-                        case 'ongoing': return '#f59e0b';
-                        case 'completed': return '#ef4444';
-                        default: return '#3b82f6';
-                    }
-                }
-                
-                getActionIcon(action) {
-                    const icons = {
-                        'register': 'fa-user-plus',
-                        'remind': 'fa-bell',
-                        'details': 'fa-info-circle',
-                        'agenda': 'fa-list-ol',
-                        'minutes': 'fa-file-alt',
-                        'join': 'fa-video'
-                    };
-                    return `<i class="fas ${icons[action] || 'fa-arrow-right'}"></i>`;
-                }
-                
-                capitalizeFirstLetter(string) {
-                    return string.charAt(0).toUpperCase() + string.slice(1);
+                if (view === 'list') {
+                    this.elements.listViewBtn.classList.add('active');
+                    this.elements.calendarViewBtn.classList.remove('active');
+                    this.elements.eventsList.style.display = 'grid';
+                    this.elements.calendarView.style.display = 'none';
+                    this.renderEvents();
+                } else {
+                    this.elements.calendarViewBtn.classList.add('active');
+                    this.elements.listViewBtn.classList.remove('active');
+                    this.elements.eventsList.style.display = 'none';
+                    this.elements.calendarView.style.display = 'block';
+                    this.renderCalendar();
                 }
             }
             
-            // Initialize Event Manager
-            new EventManager();
-        });
-    </script>
+            getFilteredEvents() {
+                let filtered = this.events;
+                
+                // Apply status filter
+                if (this.currentFilter !== 'all') {
+                    filtered = filtered.filter(event => event.status === this.currentFilter);
+                }
+                
+                // Apply search filter
+                if (this.searchTerm) {
+                    filtered = filtered.filter(event => 
+                        event.title.toLowerCase().includes(this.searchTerm) || 
+                        event.description.toLowerCase().includes(this.searchTerm) ||
+                        event.location.toLowerCase().includes(this.searchTerm)
+                    );
+                }
+                
+                return filtered;
+            }
+            
+            renderEvents() {
+                const filteredEvents = this.getFilteredEvents();
+                
+                if (filteredEvents.length === 0) {
+                    this.elements.eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No ${this.currentFilter} events found</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.elements.eventsList.innerHTML = '';
+                
+                filteredEvents.forEach(event => {
+                    const eventCard = this.createEventCard(event);
+                    this.elements.eventsList.appendChild(eventCard);
+                });
+            }
+            
+            createEventCard(event) {
+                const day = event.date.getDate();
+                const month = this.formatMonth(event.date);
+                
+                const statusClass = `status-${event.status}`;
+                const statusText = this.capitalizeFirstLetter(event.status);
+                
+                const eventCard = document.createElement('div');
+                eventCard.className = `event-card ${event.isNew ? 'new-event' : ''}`;
+                eventCard.tabIndex = 0;
+                eventCard.setAttribute('role', 'button');
+                eventCard.setAttribute('aria-label', `Event: ${event.title}`);
+                
+                eventCard.innerHTML = `
+                    <div class="event-date" style="background: ${this.getDateBackgroundColor(event.status)}; color: ${this.getDateTextColor(event.status)};">
+                        <div class="day">${day}</div>
+                        <div class="month">${month}</div>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">${event.title}</h3>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${event.location}
+                        </div>
+                        <div class="event-time">
+                            <i class="far fa-clock"></i>
+                            ${event.time}
+                        </div>
+                        <p class="event-description">${event.description}</p>
+                        <span class="event-status ${statusClass}">${statusText}</span>
+                        <div class="event-actions">
+                            ${event.actions.map(action => `
+                                <button class="action-btn ${action === 'register' || action === 'join' ? 'btn-primary' : 'btn-outline'}" aria-label="${action} ${event.title}">
+                                    ${this.getActionIcon(action)} ${this.capitalizeFirstLetter(action)}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                return eventCard;
+            }
+            
+            renderCalendar() {
+                const now = new Date();
+                const today = new Date();
+                
+                // Get first day of month and total days in month
+                const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
+                const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+                
+                // Get events for this month
+                const monthEvents = this.events.filter(event => 
+                    event.date.getMonth() === this.currentMonth && 
+                    event.date.getFullYear() === this.currentYear
+                );
+                
+                // Generate calendar HTML
+                let calendarHTML = `
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button class="calendar-nav-btn" id="prev-month">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="calendar-nav-btn" id="next-month">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <h3 class="calendar-title">${new Date(this.currentYear, this.currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                `;
+                
+                // Add empty cells for days before the first day of month
+                for (let i = 0; i < firstDay; i++) {
+                    calendarHTML += `<div class="calendar-day empty"></div>`;
+                }
+                
+                // Add days of month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(this.currentYear, this.currentMonth, day);
+                    const dayEvents = monthEvents.filter(event => event.date.getDate() === day);
+                    const isToday = date.getDate() === today.getDate() && 
+                                  date.getMonth() === today.getMonth() && 
+                                  date.getFullYear() === today.getFullYear();
+                    
+                    calendarHTML += `<div class="calendar-day ${isToday ? 'today' : ''}" data-date="${date.toISOString()}">`;
+                    calendarHTML += `<div class="calendar-day-number">${day}</div>`;
+                    
+                    dayEvents.forEach(event => {
+                        calendarHTML += `
+                            <div class="calendar-event" style="background: ${this.getDateBackgroundColor(event.status)}; color: ${this.getDateTextColor(event.status)};" 
+                                 data-event-id="${event.id}" title="${event.title}">
+                                ${event.time} - ${event.title}
+                            </div>
+                        `;
+                    });
+                    
+                    calendarHTML += `</div>`;
+                }
+                
+                calendarHTML += `</div>`;
+                this.elements.calendarView.innerHTML = calendarHTML;
+                
+                // Add event listeners for calendar navigation
+                document.getElementById('prev-month').addEventListener('click', () => {
+                    this.navigateMonth(-1);
+                });
+                
+                document.getElementById('next-month').addEventListener('click', () => {
+                    this.navigateMonth(1);
+                });
+                
+                // Add event listeners for calendar events
+                document.querySelectorAll('.calendar-event').forEach(eventEl => {
+                    eventEl.addEventListener('click', (e) => {
+                        const eventId = parseInt(eventEl.dataset.eventId);
+                        const event = this.events.find(ev => ev.id === eventId);
+                        if (event) {
+                            alert(`Showing details for: ${event.title}\nDate: ${event.date.toLocaleDateString()}\nTime: ${event.time}\nLocation: ${event.location}`);
+                        }
+                    });
+                });
+            }
+            
+            navigateMonth(offset) {
+                this.currentMonth += offset;
+                
+                // Handle year transition
+                if (this.currentMonth < 0) {
+                    this.currentMonth = 11;
+                    this.currentYear--;
+                } else if (this.currentMonth > 11) {
+                    this.currentMonth = 0;
+                    this.currentYear++;
+                }
+                
+                this.renderCalendar();
+            }
+            
+            // Helper methods
+            getOrdinalSuffix(day) {
+                if (day > 3 && day < 21) return 'th';
+                switch (day % 10) {
+                    case 1: return 'st';
+                    case 2: return 'nd';
+                    case 3: return 'rd';
+                    default: return 'th';
+                }
+            }
+            
+            formatMonth(date) {
+                const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+                return months[date.getMonth()];
+            }
+            
+            getDateBackgroundColor(status) {
+                switch(status) {
+                    case 'upcoming': return 'rgba(16, 185, 129, 0.1)';
+                    case 'ongoing': return 'rgba(245, 158, 11, 0.1)';
+                    case 'completed': return 'rgba(239, 68, 68, 0.1)';
+                    default: return 'rgba(59, 130, 246, 0.1)';
+                }
+            }
+            
+            getDateTextColor(status) {
+                switch(status) {
+                    case 'upcoming': return '#10b981';
+                    case 'ongoing': return '#f59e0b';
+                    case 'completed': return '#ef4444';
+                    default: return '#3b82f6';
+                }
+            }
+            
+            getActionIcon(action) {
+                const icons = {
+                    'register': 'fa-user-plus',
+                    'remind': 'fa-bell',
+                    'details': 'fa-info-circle',
+                    'agenda': 'fa-list-ol',
+                    'minutes': 'fa-file-alt',
+                    'join': 'fa-video'
+                };
+                return `<i class="fas ${icons[action] || 'fa-arrow-right'}"></i>`;
+            }
+            
+            capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        }
+        
+        // Initialize Event Manager
+        new EventManager();
+    });
+</script>
 </body>
 </html>
 
