@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🌍 GeoSim: World Power Game</title>
+  <title>🌍 GeoSim: Enhanced World Power Game</title>
   <style>
     body {
       background-color: #111;
@@ -62,6 +62,14 @@
       background-color: #b22222 !important;
     }
 
+    .at-war {
+      border: 2px solid red !important;
+    }
+
+    .ally {
+      border: 2px solid #00aa00 !important;
+    }
+
     button {
       margin: 5px;
       padding: 6px 10px;
@@ -74,6 +82,12 @@
 
     button:hover {
       background-color: #555;
+    }
+
+    button:disabled {
+      background-color: #222;
+      color: #666;
+      cursor: not-allowed;
     }
 
     #events {
@@ -101,10 +115,30 @@
       border-top: 1px solid #444;
       margin: 10px 0;
     }
+
+    .progress-bar {
+      background-color: #333;
+      border-radius: 3px;
+      height: 10px;
+      margin: 3px 0;
+    }
+
+    .progress-fill {
+      background-color: #4CAF50;
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    #victoryPanel {
+      background-color: #2a2a5a;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>🌍 GeoSim: World Power Strategy</h1>
+  <h1>🌍 GeoSim: Enhanced World Power Strategy</h1>
 
   <div id="main">
     <div class="panel">
@@ -114,7 +148,18 @@
       </div>
       <div id="playerActions" style="display:none;">
         <button onclick="collectTaxes()">💰 Collect Taxes</button>
+        <button onclick="developTechnology()">🔬 Research Tech (-$200)</button>
+        <button onclick="buildMilitary()">🛡️ Build Army (-$150)</button>
         <button onclick="switchCountry()">🔄 Switch Country</button>
+      </div>
+      <div id="victoryPanel" style="display:none;">
+        <div class="title">Victory Progress</div>
+        <div>Economic Dominance: <span id="economicProgress">0%</span></div>
+        <div class="progress-bar"><div id="economicBar" class="progress-fill" style="width:0%"></div></div>
+        <div>Military Dominance: <span id="militaryProgress">0%</span></div>
+        <div class="progress-bar"><div id="militaryBar" class="progress-fill" style="width:0%"></div></div>
+        <div>Diplomatic Influence: <span id="diplomaticProgress">0%</span></div>
+        <div class="progress-bar"><div id="diplomaticBar" class="progress-fill" style="width:0%"></div></div>
       </div>
     </div>
 
@@ -131,15 +176,93 @@
     <div class="panel">
       <div class="title">📰 World Events</div>
       <div id="events"></div>
+      <div class="title">Technologies</div>
+      <div id="techPanel"></div>
     </div>
   </div>
+
   <script>
+// Enhanced game state
 const countries = [
-  { name: "Zambara", stability: 85, military: 1000, money: 500, rebels: false, electionCooldown: 0 },
-  { name: "Korvia", stability: 90, military: 950, money: 600, rebels: false, electionCooldown: 0 },
-  { name: "Tanora", stability: 75, military: 1100, money: 450, rebels: false, electionCooldown: 0 },
-  { name: "Elyria", stability: 95, military: 1200, money: 700, rebels: false, electionCooldown: 0 },
-  { name: "Vandora", stability: 80, military: 980, money: 400, rebels: false, electionCooldown: 0 }
+  { 
+    name: "Zambara", 
+    stability: 85, 
+    military: 1000, 
+    money: 500, 
+    rebels: false, 
+    electionCooldown: 0,
+    technologies: [],
+    tradeRoutes: [],
+    atWarWith: [],
+    alliances: [],
+    taxRate: 0.2,
+    gdp: 1000
+  },
+  { 
+    name: "Korvia", 
+    stability: 90, 
+    military: 950, 
+    money: 600, 
+    rebels: false, 
+    electionCooldown: 0,
+    technologies: [],
+    tradeRoutes: [],
+    atWarWith: [],
+    alliances: [],
+    taxRate: 0.15,
+    gdp: 1200
+  },
+  { 
+    name: "Tanora", 
+    stability: 75, 
+    military: 1100, 
+    money: 450, 
+    rebels: false, 
+    electionCooldown: 0,
+    technologies: [],
+    tradeRoutes: [],
+    atWarWith: [],
+    alliances: [],
+    taxRate: 0.25,
+    gdp: 800
+  },
+  { 
+    name: "Elyria", 
+    stability: 95, 
+    military: 1200, 
+    money: 700, 
+    rebels: false, 
+    electionCooldown: 0,
+    technologies: [],
+    tradeRoutes: [],
+    atWarWith: [],
+    alliances: [],
+    taxRate: 0.1,
+    gdp: 1500
+  },
+  { 
+    name: "Vandora", 
+    stability: 80, 
+    military: 980, 
+    money: 400, 
+    rebels: false, 
+    electionCooldown: 0,
+    technologies: [],
+    tradeRoutes: [],
+    atWarWith: [],
+    alliances: [],
+    taxRate: 0.3,
+    gdp: 700
+  }
+];
+
+// Technology tree
+const technologies = [
+  { name: "Advanced Agriculture", cost: 200, effect: "GDP +20%", unlocked: false },
+  { name: "Military Science", cost: 300, effect: "Army +30% strength", unlocked: false },
+  { name: "Diplomatic Corps", cost: 250, effect: "Relations +25%", unlocked: false },
+  { name: "Industrial Revolution", cost: 400, effect: "Tax income +50%", unlocked: false },
+  { name: "Nuclear Program", cost: 1000, effect: "Deterrence against war", unlocked: false }
 ];
 
 // Store relations for each country with others
@@ -153,22 +276,37 @@ countries.forEach(c1 => {
 });
 
 let currentPlayer = null;
-</script>
+let gameYear = 2023;
+let victoryAchieved = false;
 
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<script>
+// Initialize the game
+function initGame() {
+  renderMap();
+  renderTechPanel();
+  setInterval(gameTick, 4000); // Every 4 seconds
+}
+
+// Main game loop
 function gameTick() {
+  if (victoryAchieved) return;
+  
+  gameYear++;
+  document.querySelector("h1").textContent = `🌍 GeoSim: Enhanced World Power Strategy (Year ${gameYear})`;
+  
   countries.forEach(country => {
     // 📉 Stability Decay
     country.stability -= Math.random() * 2;
+    if (country.stability < 0) country.stability = 0;
+    if (country.stability > 100) country.stability = 100;
 
     // 💰 Passive Income
-    country.money += Math.floor(country.military / 50);
-
+    const techBonus = country.technologies.includes("Industrial Revolution") ? 1.5 : 1;
+    country.money += Math.floor(country.gdp * country.taxRate * techBonus / 4); // Quarterly income
+    
+    // GDP growth
+    const agriBonus = country.technologies.includes("Advanced Agriculture") ? 1.2 : 1;
+    country.gdp *= (1 + (Math.random() * 0.05 - 0.01) * agriBonus);
+    
     // 🗳️ Election if unstable
     if (country.stability < 40 && country.electionCooldown <= 0 && !country.rebels) {
       triggerElection(country);
@@ -180,7 +318,8 @@ function gameTick() {
     // 🔥 Rebels Spread
     if (country.rebels && Math.random() < 0.2) {
       country.stability -= 5;
-      logEvent(`⚔️ Rebels destabilize ${country.name}!`);
+      country.military -= 50;
+      logEvent(`⚔️ Rebels destabilize ${country.name}! Military weakened.`);
     }
 
     // 💥 Rebels may start
@@ -188,10 +327,91 @@ function gameTick() {
       country.rebels = true;
       logEvent(`🚨 Rebellion begins in ${country.name}!`);
     }
+    
+    // Handle wars
+    if (country.atWarWith.length > 0) {
+      country.stability -= 1;
+      country.money -= 50;
+      country.military -= 20;
+    }
+    
+    // Ensure military doesn't go negative
+    if (country.military < 0) country.military = 0;
   });
 
+  // Process wars
+  processWars();
+  
+  // Random events
+  if (Math.random() < 0.3) randomGlobalEvent();
+  
+  // AI decisions
+  aiDecisions();
+  
+  // Check victory conditions
+  checkVictory();
+  
   renderMap();
   renderPlayerPanel();
+  renderDiplomacy();
+}
+
+function processWars() {
+  countries.forEach(attacker => {
+    attacker.atWarWith.forEach(defenderName => {
+      const defender = countries.find(c => c.name === defenderName);
+      if (!defender) return;
+      
+      // Military science bonus
+      const attackerBonus = attacker.technologies.includes("Military Science") ? 1.3 : 1;
+      const defenderBonus = defender.technologies.includes("Military Science") ? 1.3 : 1;
+      
+      // Calculate damage
+      const attackerDamage = Math.floor(Math.random() * 50 * attackerBonus);
+      const defenderDamage = Math.floor(Math.random() * 50 * defenderBonus);
+      
+      defender.military -= attackerDamage;
+      attacker.military -= defenderDamage;
+      
+      // Check if war ends
+      if (defender.military <= 0 || Math.random() < 0.1) {
+        endWar(attacker, defender);
+      }
+    });
+  });
+}
+
+function endWar(attacker, defender) {
+  attacker.atWarWith = attacker.atWarWith.filter(name => name !== defender.name);
+  defender.atWarWith = defender.atWarWith.filter(name => name !== attacker.name);
+  
+  if (defender.military <= 0) {
+    // Attacker wins
+    const reparations = Math.floor(defender.money * 0.5);
+    attacker.money += reparations;
+    defender.money -= reparations;
+    logEvent(`🏳️ ${defender.name} surrenders to ${attacker.name}! Pays $${reparations} in reparations.`);
+    
+    // Relation changes
+    attacker.relations[defender.name] -= 30;
+    defender.relations[attacker.name] -= 50;
+    
+    // Other countries react
+    countries.forEach(c => {
+      if (c !== attacker && c !== defender) {
+        if (c.alliances.includes(defender.name)) {
+          c.relations[attacker.name] -= 20;
+        } else if (c.relations[defender.name] > 30) {
+          c.relations[attacker.name] -= 10;
+        }
+      }
+    });
+  } else {
+    // Peace treaty
+    logEvent(`🕊️ ${attacker.name} and ${defender.name} sign a peace treaty.`);
+    attacker.relations[defender.name] += 10;
+    defender.relations[attacker.name] += 10;
+  }
 }
 
 function triggerElection(country) {
@@ -216,18 +436,27 @@ function renderMap() {
     const div = document.createElement("div");
     div.className = "country-card";
     if (c.stability < 40) div.classList.add("low-stability");
+    if (c.atWarWith.length > 0) div.classList.add("at-war");
+    
+    // Check if allied with player
+    if (currentPlayer && currentPlayer.alliances.includes(c.name)) {
+      div.classList.add("ally");
+    }
 
     div.innerHTML = `
       <strong>${c.name}</strong><br>
       💬 Stability: ${Math.floor(c.stability)}<br>
-      🪖 Army: ${c.military}<br>
-      💰 Money: $${c.money}<br>
-      ${c.rebels ? "⚔️ Rebels active" : ""}
+      🪖 Army: ${Math.floor(c.military)}<br>
+      💰 Money: $${Math.floor(c.money)}<br>
+      🏭 GDP: $${Math.floor(c.gdp)}<br>
+      ${c.rebels ? "⚔️ Rebels active<br>" : ""}
+      ${c.atWarWith.length > 0 ? "⚔️ At war with " + c.atWarWith.join(", ") + "<br>" : ""}
     `;
 
     div.onclick = () => {
       currentPlayer = c;
       document.getElementById("playerActions").style.display = "block";
+      document.getElementById("victoryPanel").style.display = "block";
       renderPlayerPanel();
       renderDiplomacy();
     };
@@ -247,24 +476,181 @@ function renderPlayerPanel() {
   panel.innerHTML = `
     <strong>${currentPlayer.name}</strong><br>
     📉 Stability: ${Math.floor(currentPlayer.stability)}<br>
-    💰 Money: $${currentPlayer.money}<br>
-    🪖 Army: ${currentPlayer.military}<br>
+    💰 Money: $${Math.floor(currentPlayer.money)}<br>
+    🪖 Army: ${Math.floor(currentPlayer.military)}<br>
+    🏭 GDP: $${Math.floor(currentPlayer.gdp)}<br>
     ${currentPlayer.rebels ? "⚔️ Rebels are active<br>" : ""}
+    ${currentPlayer.atWarWith.length > 0 ? "⚔️ At war with: " + currentPlayer.atWarWith.join(", ") + "<br>" : ""}
+    ${currentPlayer.alliances.length > 0 ? "🤝 Alliances: " + currentPlayer.alliances.join(", ") + "<br>" : ""}
+    <br>
+    <strong>Technologies:</strong><br>
+    ${currentPlayer.technologies.length > 0 ? currentPlayer.technologies.join(", ") : "None"}
   `;
+  
+  // Update victory progress
+  updateVictoryProgress();
+}
+
+function updateVictoryProgress() {
+  if (!currentPlayer) return;
+  
+  // Calculate economic dominance (GDP share)
+  const totalGDP = countries.reduce((sum, c) => sum + c.gdp, 0);
+  const economicShare = (currentPlayer.gdp / totalGDP) * 100;
+  document.getElementById("economicProgress").textContent = `${economicShare.toFixed(1)}%`;
+  document.getElementById("economicBar").style.width = `${economicShare}%`;
+  
+  // Calculate military dominance
+  const totalMilitary = countries.reduce((sum, c) => sum + c.military, 0);
+  const militaryShare = (currentPlayer.military / totalMilitary) * 100;
+  document.getElementById("militaryProgress").textContent = `${militaryShare.toFixed(1)}%`;
+  document.getElementById("militaryBar").style.width = `${militaryShare}%`;
+  
+  // Calculate diplomatic influence (average relations)
+  let totalRelations = 0;
+  let count = 0;
+  countries.forEach(c => {
+    if (c.name !== currentPlayer.name) {
+      totalRelations += c.relations[currentPlayer.name] || 0;
+      count++;
+    }
+  });
+  const diplomaticScore = ((totalRelations / count) + 50) / 2; // Normalize to 0-100
+  document.getElementById("diplomaticProgress").textContent = `${diplomaticScore.toFixed(1)}%`;
+  document.getElementById("diplomaticBar").style.width = `${diplomaticScore}%`;
+}
+
+function checkVictory() {
+  if (!currentPlayer || victoryAchieved) return;
+  
+  // Economic victory (40% of world GDP)
+  const totalGDP = countries.reduce((sum, c) => sum + c.gdp, 0);
+  if (currentPlayer.gdp / totalGDP >= 0.4) {
+    declareVictory("economic");
+    return;
+  }
+  
+  // Military victory (50% of world military and no active wars)
+  const totalMilitary = countries.reduce((sum, c) => sum + c.military, 0);
+  if (currentPlayer.military / totalMilitary >= 0.5 && currentPlayer.atWarWith.length === 0) {
+    declareVictory("military");
+    return;
+  }
+  
+  // Diplomatic victory (alliances with all countries)
+  if (currentPlayer.alliances.length === countries.length - 1) {
+    declareVictory("diplomatic");
+    return;
+  }
+}
+
+function declareVictory(type) {
+  victoryAchieved = true;
+  let message = "";
+  
+  switch(type) {
+    case "economic":
+      message = `🏆 ${currentPlayer.name} achieves ECONOMIC DOMINANCE! Your nation controls 40% of the world's GDP.`;
+      break;
+    case "military":
+      message = `🏆 ${currentPlayer.name} achieves MILITARY SUPREMACY! Your forces make up 50% of global military power.`;
+      break;
+    case "diplomatic":
+      message = `🏆 ${currentPlayer.name} achieves DIPLOMATIC VICTORY! All nations are now your allies.`;
+      break;
+  }
+  
+  logEvent(message);
+  alert(`VICTORY!\n\n${message}\n\nGame over. Refresh to play again.`);
 }
 
 function logEvent(msg) {
   const eDiv = document.getElementById("events");
   const line = document.createElement("div");
-  line.innerText = `🕒 ${new Date().toLocaleTimeString()}: ${msg}`;
+  line.innerText = `🕒 Year ${gameYear}: ${msg}`;
   eDiv.prepend(line);
 }
-renderMap();
-setInterval(gameTick, 4000); // Every 4 seconds
 
-</script>
+function renderTechPanel() {
+  const panel = document.getElementById("techPanel");
+  panel.innerHTML = "";
+  
+  technologies.forEach(tech => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <strong>${tech.name}</strong><br>
+      ${tech.effect} (Cost: $${tech.cost})<br>
+      ${tech.unlocked ? "✅ Unlocked" : "🔒 Locked"}
+    `;
+    panel.appendChild(div);
+  });
+}
 
-<script>function renderDiplomacy() {
+// Player actions
+function collectTaxes() {
+  const taxRevenue = Math.floor(currentPlayer.gdp * currentPlayer.taxRate);
+  currentPlayer.money += taxRevenue;
+  currentPlayer.stability -= 5; // People don't like taxes
+  
+  logEvent(`💰 ${currentPlayer.name} collected $${taxRevenue} in taxes.`);
+  renderPlayerPanel();
+}
+
+function developTechnology() {
+  if (currentPlayer.money < 200) {
+    logEvent("💸 Not enough money to research technology.");
+    return;
+  }
+  
+  currentPlayer.money -= 200;
+  
+  // Determine which tech to unlock
+  const availableTechs = technologies.filter(t => !t.unlocked);
+  if (availableTechs.length === 0) {
+    logEvent("🔬 All technologies already researched!");
+    currentPlayer.money += 200; // Refund
+    return;
+  }
+  
+  const techIndex = Math.floor(Math.random() * availableTechs.length);
+  const tech = availableTechs[techIndex];
+  tech.unlocked = true;
+  currentPlayer.technologies.push(tech.name);
+  
+  // Apply tech effects
+  if (tech.name === "Advanced Agriculture") {
+    currentPlayer.gdp *= 1.2;
+  } else if (tech.name === "Military Science") {
+    currentPlayer.military *= 1.3;
+  }
+  
+  logEvent(`🔬 ${currentPlayer.name} developed ${tech.name}! ${tech.effect}`);
+  renderPlayerPanel();
+  renderTechPanel();
+}
+
+function buildMilitary() {
+  if (currentPlayer.money < 150) {
+    logEvent("💸 Not enough money to build military.");
+    return;
+  }
+  
+  currentPlayer.money -= 150;
+  currentPlayer.military += 200;
+  
+  logEvent(`🛡️ ${currentPlayer.name} built up its military forces.`);
+  renderPlayerPanel();
+}
+
+function switchCountry() {
+  currentPlayer = null;
+  document.getElementById("playerActions").style.display = "none";
+  document.getElementById("victoryPanel").style.display = "none";
+  renderPlayerPanel();
+}
+
+// Diplomacy functions
+function renderDiplomacy() {
   const panel = document.getElementById("diplomacyPanel");
   if (!currentPlayer) {
     panel.innerHTML = "Choose a country to interact with.";
@@ -276,13 +662,18 @@ setInterval(gameTick, 4000); // Every 4 seconds
     if (other.name === currentPlayer.name) return;
 
     const relation = currentPlayer.relations[other.name] ?? 0;
+    const isAlly = currentPlayer.alliances.includes(other.name);
+    const isAtWar = currentPlayer.atWarWith.includes(other.name);
+    
     html += `
       <div>
         <strong>${other.name}</strong><br>
-        🧭 Relation: ${relation}<br>
-        <button onclick="sendAid('${other.name}')">🤝 Send Aid (-$100)</button>
-        <button onclick="spyOn('${other.name}')">🕵️ Spy (-$50)</button>
-        <button onclick="threaten('${other.name}')">🚫 Threaten</button>
+        🧭 Relation: ${relation}${isAlly ? " (ALLY)" : ""}${isAtWar ? " (AT WAR)" : ""}<br>
+        <button onclick="sendAid('${other.name}')" ${currentPlayer.money < 100 ? "disabled" : ""}>🤝 Send Aid (-$100)</button>
+        <button onclick="spyOn('${other.name}')" ${currentPlayer.money < 50 ? "disabled" : ""}>🕵️ Spy (-$50)</button>
+        <button onclick="proposeAlliance('${other.name}')" ${isAlly ? "disabled" : ""}>🤝 Propose Alliance</button>
+        <button onclick="declareWar('${other.name}')" ${isAtWar ? "disabled" : ""}>⚔️ Declare War</button>
+        <button onclick="establishTrade('${other.name}')" ${currentPlayer.tradeRoutes.includes(other.name) ? "disabled" : ""}>🚢 Establish Trade</button>
         <hr>
       </div>
     `;
@@ -302,6 +693,7 @@ function sendAid(targetName) {
 
   const target = countries.find(c => c.name === targetName);
   target.relations[currentPlayer.name] += 10;
+  target.money += 100;
 
   logEvent(`🤝 ${currentPlayer.name} sent aid to ${targetName}.`);
   renderDiplomacy();
@@ -319,7 +711,8 @@ function spyOn(targetName) {
   const target = countries.find(c => c.name === targetName);
 
   if (chance < 0.5) {
-    logEvent(`🕵️ ${currentPlayer.name} successfully gathered intelligence on ${targetName}.`);
+    const info = `Stability: ${target.stability}, Military: ${target.military}, Money: ${target.money}`;
+    logEvent(`🕵️ ${currentPlayer.name} gathered intelligence on ${targetName}: ${info}`);
   } else {
     logEvent(`🚫 ${targetName} caught your spies!`);
     currentPlayer.relations[targetName] -= 10;
@@ -330,86 +723,201 @@ function spyOn(targetName) {
   renderPlayerPanel();
 }
 
-function threaten(targetName) {
+function proposeAlliance(targetName) {
   const target = countries.find(c => c.name === targetName);
-  const chance = Math.random();
-
-  if (chance < 0.3) {
-    logEvent(`😡 ${targetName} is angered by ${currentPlayer.name}'s threats!`);
-    currentPlayer.relations[targetName] -= 15;
-    target.relations[currentPlayer.name] -= 15;
+  const relation = currentPlayer.relations[targetName] || 0;
+  
+  if (relation >= 30) {
+    currentPlayer.alliances.push(targetName);
+    target.alliances.push(currentPlayer.name);
+    currentPlayer.relations[targetName] += 10;
+    target.relations[currentPlayer.name] += 10;
+    logEvent(`🤝 ${currentPlayer.name} and ${targetName} formed an alliance!`);
   } else {
-    logEvent(`😨 ${targetName} is intimidated by ${currentPlayer.name}.`);
-    currentPlayer.relations[targetName] += 5;
-    target.relations[currentPlayer.name] -= 5;
+    logEvent(`❌ ${targetName} rejected your alliance proposal. Improve relations first.`);
   }
+  
+  renderDiplomacy();
+}
 
+function declareWar(targetName) {
+  const target = countries.find(c => c.name === targetName);
+  
+  // Check if already at war
+  if (currentPlayer.atWarWith.includes(targetName)) {
+    logEvent(`❌ You're already at war with ${targetName}!`);
+    return;
+  }
+  
+  // Check for nuclear deterrence
+  if (target.technologies.includes("Nuclear Program")) {
+    logEvent(`☢️ ${targetName} has nuclear weapons! War declaration cancelled.`);
+    return;
+  }
+  
+  currentPlayer.atWarWith.push(targetName);
+  target.atWarWith.push(currentPlayer.name);
+  
+  // Relation changes
+  currentPlayer.relations[targetName] -= 50;
+  target.relations[currentPlayer.name] -= 50;
+  
+  // Ally reactions
+  currentPlayer.alliances.forEach(allyName => {
+    const ally = countries.find(c => c.name === allyName);
+    if (ally && Math.random() < 0.7) { // 70% chance ally joins war
+      ally.atWarWith.push(targetName);
+      target.atWarWith.push(allyName);
+      logEvent(`⚔️ ${allyName} joins ${currentPlayer.name}'s war against ${targetName}!`);
+    }
+  });
+  
+  logEvent(`⚔️ ${currentPlayer.name} declared war on ${targetName}!`);
+  renderDiplomacy();
+}
+
+function establishTrade(targetName) {
+  if (currentPlayer.tradeRoutes.includes(targetName)) {
+    logEvent(`🚢 Trade route with ${targetName} already exists.`);
+    return;
+  }
+  
+  const target = countries.find(c => c.name === targetName);
+  const relation = currentPlayer.relations[targetName] || 0;
+  
+  if (relation >= 0) {
+    currentPlayer.tradeRoutes.push(targetName);
+    target.tradeRoutes.push(currentPlayer.name);
+    
+    // Economic benefits
+    currentPlayer.gdp *= 1.05;
+    target.gdp *= 1.05;
+    
+    // Relation boost
+    currentPlayer.relations[targetName] += 5;
+    target.relations[currentPlayer.name] += 5;
+    
+    logEvent(`🚢 ${currentPlayer.name} established trade with ${targetName}! Both economies grow.`);
+  } else {
+    logEvent(`❌ ${targetName} refuses to trade with you. Improve relations first.`);
+  }
+  
   renderDiplomacy();
   renderPlayerPanel();
 }
-</script>
 
-<script>function randomGlobalEvent() {
+// Global events
+function randomGlobalEvent() {
   const roll = Math.random();
-  if (roll < 0.2) {
-    // 🌊 Flood disaster
+  if (roll < 0.15) {
+    // 🌊 Natural disaster
     const victim = countries[Math.floor(Math.random() * countries.length)];
     victim.stability -= 15;
-    logEvent(`🌊 Major flooding hits ${victim.name}. Stability drops.`);
-  } else if (roll < 0.4) {
-    // 🌍 UN peace summit
+    victim.gdp *= 0.9;
+    logEvent(`🌊 Major disaster hits ${victim.name}! Stability and economy suffer.`);
+  } else if (roll < 0.3) {
+    // 🌍 Global summit
     countries.forEach(c => {
       for (let name in c.relations) {
         c.relations[name] += 5;
       }
     });
     logEvent(`🕊️ A global peace summit improves international relations.`);
-  } else if (roll < 0.6) {
-    // ⚠️ Oil crisis
+  } else if (roll < 0.45) {
+    // ⚠️ Economic crisis
     const victim = countries[Math.floor(Math.random() * countries.length)];
-    victim.money -= 100;
-    logEvent(`⛽ Oil crisis strikes ${victim.name}. Economy suffers.`);
-  } else if (roll < 0.8) {
-    // 🧠 Technology boom
-    const lucky = countries[Math.floor(Math.random() * countries.length)];
-    lucky.money += 200;
-    logEvent(`💻 ${lucky.name} experiences a tech boom! Economy grows.`);
-  } else {
+    victim.money -= 200;
+    victim.gdp *= 0.85;
+    logEvent(`💸 Economic crisis strikes ${victim.name}! Treasury and GDP shrink.`);
+  } else if (roll < 0.6) {
+    // 🧠 Technology breakthrough
+    const tech = technologies[Math.floor(Math.random() * technologies.length)];
+    if (!tech.unlocked) {
+      tech.unlocked = true;
+      logEvent(`🔬 Global breakthrough in ${tech.name}! Now available to all.`);
+      renderTechPanel();
+    }
+  } else if (roll < 0.75) {
     // 🏃 Refugee wave
     const from = countries[Math.floor(Math.random() * countries.length)];
     const to = countries.find(c => c.name !== from.name);
     from.stability -= 10;
     to.stability -= 5;
-    logEvent(`🚨 Refugee wave from ${from.name} to ${to.name} creates instability.`);
+    to.gdp *= 1.05; // Some economic benefit to receiving country
+    logEvent(`🚨 Refugee wave from ${from.name} to ${to.name} creates instability but boosts ${to.name}'s economy.`);
+  } else if (roll < 0.9) {
+    // 🏛️ Political scandal
+    const victim = countries[Math.floor(Math.random() * countries.length)];
+    victim.stability -= 20;
+    logEvent(`📰 Political scandal rocks ${victim.name}! Stability plummets.`);
+  } else {
+    // 🎉 Global boom
+    countries.forEach(c => {
+      c.gdp *= 1.1;
+    });
+    logEvent(`📈 Global economic boom! All countries' GDP grows by 10%.`);
   }
 }
+
+// AI decision making
 function aiDecisions() {
   countries.forEach(c => {
     if (currentPlayer && c.name === currentPlayer.name) return;
 
-    for (let otherName in c.relations) {
-      const relation = c.relations[otherName];
-      const target = countries.find(n => n.name === otherName);
-
-      // 🛡️ Help allies
-      if (relation > 30 && target.rebels && Math.random() < 0.3) {
-        target.stability += 5;
-        logEvent(`🛡️ ${c.name} sent aid to ally ${target.name} to stop rebellion.`);
-      }
-
-      // 💣 Harm enemies
-      if (relation < -30 && !target.rebels && Math.random() < 0.3) {
-        target.stability -= 10;
-        logEvent(`💣 ${c.name} secretly funded unrest in ${target.name}.`);
-        if (target.stability < 30 && !target.rebels) {
-          target.rebels = true;
-          logEvent(`🔥 Rebellion starts in ${target.name} due to foreign sabotage.`);
+    // Random actions based on personality
+    const personality = Math.random();
+    
+    // 30% chance of doing something each tick
+    if (Math.random() < 0.3) {
+      // Choose a random other country to interact with
+      const others = countries.filter(other => other.name !== c.name);
+      if (others.length === 0) return;
+      
+      const target = others[Math.floor(Math.random() * others.length)];
+      const relation = c.relations[target.name] || 0;
+      
+      if (personality < 0.3) {
+        // Aggressive AI
+        if (relation < -20 && !c.atWarWith.includes(target.name) && !target.technologies.includes("Nuclear Program")) {
+          c.atWarWith.push(target.name);
+          target.atWarWith.push(c.name);
+          logEvent(`⚔️ ${c.name} declared war on ${target.name}!`);
         }
+      } else if (personality < 0.6) {
+        // Diplomatic AI
+        if (relation > 30 && !c.alliances.includes(target.name)) {
+          c.alliances.push(target.name);
+          target.alliances.push(c.name);
+          logEvent(`🤝 ${c.name} and ${target.name} formed an alliance!`);
+        }
+      } else {
+        // Economic AI
+        if (relation >= 0 && !c.tradeRoutes.includes(target.name)) {
+          c.tradeRoutes.push(target.name);
+          target.tradeRoutes.push(c.name);
+          c.gdp *= 1.05;
+          target.gdp *= 1.05;
+          logEvent(`🚢 ${c.name} established trade with ${target.name}!`);
+        }
+      }
+    }
+    
+    // AI research
+    if (c.money > 250 && Math.random() < 0.2) {
+      c.money -= 200;
+      const availableTechs = technologies.filter(t => !t.unlocked);
+      if (availableTechs.length > 0) {
+        const tech = availableTechs[Math.floor(Math.random() * availableTechs.length)];
+        tech.unlocked = true;
+        c.technologies.push(tech.name);
+        logEvent(`🔬 ${c.name} developed ${tech.name}!`);
       }
     }
   });
 }
-  if (Math.random() < 0.3) randomGlobalEvent(); // 30% chance per tick
-  aiDecisions();
 
-</script>
+// Initialize the game
+window.onload = initGame;
+  </script>
+</body>
+</html>
