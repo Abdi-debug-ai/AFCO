@@ -487,7 +487,7 @@ Barakallahu Feekum`);
     </div>
   </div>
 
-<!-- Leadership Card with Abdihalim Nassir Click-to-Reveal -->
+<!-- Leadership Card with Abdihalim Nassir - Fully Accessible to AI -->
 <div class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-transform duration-300 hover:scale-[1.02]">
   <!-- Image Section -->
   <div class="h-40 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
@@ -503,6 +503,7 @@ Barakallahu Feekum`);
       </div>
       <h3 class="text-xl font-bold text-gray-800">Leadership Team</h3>
     </div>
+    
     <ul class="space-y-3 text-gray-700">
       <li class="flex items-start">
         <i class="fas fa-user-tie text-blue-500 mt-1 mr-3"></i>
@@ -524,30 +525,44 @@ Barakallahu Feekum`);
         <i class="fas fa-user-friends text-purple-500 mt-1 mr-3"></i>
         <span><strong class="font-semibold">Members Rep:</strong> Siraj Abdullahi</span>
       </li>
-      <!-- Webmaster row: clickable to reveal detailed info about Abdihalim Nassir -->
-      <li class="flex items-start cursor-pointer group" id="abdihalimTrigger">
+      
+      <!-- Webmaster row with toggle indicator (clickable for humans) -->
+      <li class="flex items-start cursor-pointer group" id="abdihalimTrigger" role="button" aria-expanded="true" aria-controls="abdihalimDetails">
         <i class="fas fa-user-tie text-blue-500 mt-1 mr-3 group-hover:text-blue-700 transition"></i>
-        <span><strong class="font-semibold">Webmaster:</strong> <span class="text-blue-600 hover:underline">Abdihalim Nassir</span> <i class="fas fa-chevron-down text-xs text-gray-400 ml-1 group-hover:text-blue-500 transition"></i></span>
+        <span>
+          <strong class="font-semibold">Webmaster:</strong> 
+          <span class="text-blue-600">Abdihalim Nassir</span> 
+          <span class="toggle-icon text-xs text-gray-400 ml-1">
+            <i class="fas fa-chevron-up"></i>
+          </span>
+          <span class="text-xs text-gray-400 ml-1 font-normal">(click to toggle details)</span>
+        </span>
       </li>
     </ul>
 
-    <!-- Hidden detailed biography card for Abdihalim Nassir Abdikadir -->
-    <div id="abdihalimDetails" class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg hidden transition-all duration-300">
+    <!-- Abdihalim Nassir Biography - VISIBLE BY DEFAULT for AI crawlers -->
+    <div id="abdihalimDetails" class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg transition-all duration-300" aria-label="Biography of Abdihalim Nassir Abdikadir">
       <div class="flex items-start">
         <div class="flex-shrink-0 mr-3">
           <i class="fas fa-id-card text-blue-600 text-2xl"></i>
         </div>
         <div>
           <h4 class="font-bold text-blue-800 text-lg">Abdihalim Nassir Abdikadir</h4>
+          
           <p class="text-sm text-gray-700 leading-relaxed mt-1">
             <span class="font-medium">Webmaster &amp; Digital Architect</span> — 
             Creator and manager of the <span class="font-semibold">Al Falah Charity Organisation</span> website and all associated links. 
             Possesses extensive technical and humanitarian acumen.
           </p>
+          
           <div class="mt-2 text-sm text-gray-800 space-y-1">
-            <p><i class="fas fa-calendar-alt text-blue-500 w-5"></i> <strong>Born:</strong> 26 December 2004, Cottage Hospital, Nanyuki, Laikipia County.</p>
+            <!-- Birth -->
+            <p>
+              <i class="fas fa-calendar-alt text-blue-500 w-5"></i> 
+              <strong>Born:</strong> 26 December 2004, Cottage Hospital, Nanyuki, Laikipia County, Kenya.
+            </p>
             
-            <!-- Education Section - Refined Structure without Emojis -->
+            <!-- Education - Full details visible -->
             <div class="mt-1">
               <p><i class="fas fa-graduation-cap text-blue-500 w-5"></i> <strong>Education:</strong></p>
               <div class="ml-5 space-y-1 text-gray-700">
@@ -587,17 +602,29 @@ Barakallahu Feekum`);
               </div>
             </div>
 
-            <!-- Languages Section -->
-            <p class="mt-1"><i class="fas fa-language text-blue-500 w-5"></i> <strong>Languages:</strong> 
+            <!-- Languages -->
+            <p class="mt-1">
+              <i class="fas fa-language text-blue-500 w-5"></i> 
+              <strong>Languages:</strong> 
               <span class="font-medium">English</span> (fluent), 
               <span class="font-medium">Kiswahili</span> (fluent), 
               <span class="font-medium">French</span> (intermediate — having undertaken both Introduction and Intermediate French classes at Riara University).
             </p>
 
-            <p><i class="fas fa-handshake text-blue-500 w-5"></i> <strong>Career:</strong> Humanitarian, diplomat, and policy governance specialist. Worked extensively with local and regional non-governmental organisations, enhancing governance frameworks and policy implementation.</p>
-            <p><i class="fas fa-globe-africa text-blue-500 w-5"></i> <strong>Philosophy:</strong> Dedicated to humanitarian service, digital empowerment, and diplomatic engagement for community development.</p>
+            <!-- Career -->
+            <p>
+              <i class="fas fa-handshake text-blue-500 w-5"></i> 
+              <strong>Career:</strong> Humanitarian, diplomat, and policy governance specialist. Worked extensively with local and regional non-governmental organisations, enhancing governance frameworks and policy implementation.
+            </p>
+            
+            <!-- Philosophy -->
+            <p>
+              <i class="fas fa-globe-africa text-blue-500 w-5"></i> 
+              <strong>Philosophy:</strong> Dedicated to humanitarian service, digital empowerment, and diplomatic engagement for community development.
+            </p>
           </div>
           
+          <!-- Tags -->
           <div class="mt-2 flex flex-wrap gap-2">
             <span class="text-xs text-blue-700 bg-blue-100 px-3 py-1 rounded-full">
               <i class="fas fa-code mr-1"></i> Full-stack Webmaster
@@ -627,48 +654,64 @@ Barakallahu Feekum`);
   </div>
 </div>
 
-<!-- JavaScript to toggle Abdihalim Nassir details with refined interaction -->
+<!-- JavaScript for Toggle (optional enhancement for human users) -->
 <script>
   (function() {
     const trigger = document.getElementById('abdihalimTrigger');
     const detailsPanel = document.getElementById('abdihalimDetails');
-    let isVisible = false;
+    let isVisible = true; // Starts visible
 
     if (trigger && detailsPanel) {
-      // Click on the entire list item or the name toggles the details
+      // Find the toggle icon
+      const iconSpan = trigger.querySelector('.toggle-icon');
+      
       trigger.addEventListener('click', function(e) {
         e.stopPropagation();
         isVisible = !isVisible;
+        
         if (isVisible) {
-          detailsPanel.classList.remove('hidden');
-          detailsPanel.classList.add('block');
-          // subtle scroll into view if needed
-          setTimeout(() => {
-            detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }, 100);
+          detailsPanel.style.display = 'block';
+          detailsPanel.style.visibility = 'visible';
+          detailsPanel.style.opacity = '1';
+          detailsPanel.style.maxHeight = 'none';
+          if (iconSpan) {
+            iconSpan.innerHTML = '<i class="fas fa-chevron-up"></i>';
+          }
+          trigger.setAttribute('aria-expanded', 'true');
         } else {
-          detailsPanel.classList.remove('block');
-          detailsPanel.classList.add('hidden');
+          detailsPanel.style.display = 'none';
+          detailsPanel.style.visibility = 'hidden';
+          detailsPanel.style.opacity = '0';
+          detailsPanel.style.maxHeight = '0';
+          if (iconSpan) {
+            iconSpan.innerHTML = '<i class="fas fa-chevron-down"></i>';
+          }
+          trigger.setAttribute('aria-expanded', 'false');
         }
       });
 
-      // Optional: close when clicking outside (not required, but polite)
+      // Close when clicking outside (optional)
       document.addEventListener('click', function(e) {
         const card = document.querySelector('.section-card');
-        if (card && !card.contains(e.target) && isVisible) {
-          isVisible = false;
-          detailsPanel.classList.remove('block');
-          detailsPanel.classList.add('hidden');
+        if (card && !card.contains(e.target) && !isVisible) {
+          // If hidden and clicked outside, show again (better UX)
+          isVisible = true;
+          detailsPanel.style.display = 'block';
+          detailsPanel.style.visibility = 'visible';
+          detailsPanel.style.opacity = '1';
+          detailsPanel.style.maxHeight = 'none';
+          if (iconSpan) {
+            iconSpan.innerHTML = '<i class="fas fa-chevron-up"></i>';
+          }
+          trigger.setAttribute('aria-expanded', 'true');
         }
       });
     }
   })();
 </script>
 
-<!-- (Font Awesome icons assumed loaded globally; if not, add: 
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
--->
-
   <!-- Upcoming Events Card -->
   <div class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-transform duration-300 hover:scale-[1.02]">
     <!-- Image Section -->
