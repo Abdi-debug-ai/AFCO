@@ -487,55 +487,187 @@ Barakallahu Feekum`);
     </div>
   </div>
 
-  <!-- Leadership Card -->
-  <div class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-transform duration-300 hover:scale-[1.02]">
-    <!-- Image Section -->
-    <div class="h-40 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
-      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-           alt="Leadership Team" 
-           class="w-full h-full object-cover opacity-90">
-    </div>
-    
-    <div class="p-6">
-      <div class="flex items-center mb-4">
-        <div class="bg-blue-100 p-3 rounded-full mr-4 shadow-inner">
-          <i class="fas fa-users text-blue-600 text-xl"></i>
-        </div>
-        <h3 class="text-xl font-bold text-gray-800">Leadership Team</h3>
-      </div>
-      <ul class="space-y-3 text-gray-700">
-        <li class="flex items-start">
-          <i class="fas fa-user-tie text-blue-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Chairman:</strong> Abdilatif Ahmed</span>
-        </li>
-        <li class="flex items-start">
-          <i class="fas fa-user-tie text-pink-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Chairlady:</strong> Rayan Hussein</span>
-        </li>
-        <li class="flex items-start">
-          <i class="fas fa-pen-fancy text-green-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Secretary:</strong> Musab Mohamed</span>
-        </li>
-        <li class="flex items-start">
-          <i class="fas fa-coins text-yellow-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Treasurer:</strong> Muad Ibrahim</span>
-        </li>
-        <li class="flex items-start">
-          <i class="fas fa-user-friends text-purple-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Members Rep:</strong> Siraj Abdullahi</span>
-        </li>
-                <li class="flex items-start">
-          <i class="fas fa-user-tie text-blue-500 mt-1 mr-3"></i>
-          <span><strong class="font-semibold">Webmaster:</strong> Abdihalim Nassir</span>
-        </li>
-      </ul>
-      <a href="/contact.html">
-        <button class="mt-6 w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold hover:from-blue-500 hover:to-blue-600 transition shadow-md">
-          Contact Leaders
-        </button>
-      </a>
-    </div>
+<!-- Leadership Card with Abdihalim Nassir Click-to-Reveal -->
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-transform duration-300 hover:scale-[1.02]">
+  <!-- Image Section -->
+  <div class="h-40 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+         alt="Leadership Team" 
+         class="w-full h-full object-cover opacity-90">
   </div>
+  
+  <div class="p-6">
+    <div class="flex items-center mb-4">
+      <div class="bg-blue-100 p-3 rounded-full mr-4 shadow-inner">
+        <i class="fas fa-users text-blue-600 text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Leadership Team</h3>
+    </div>
+    <ul class="space-y-3 text-gray-700">
+      <li class="flex items-start">
+        <i class="fas fa-user-tie text-blue-500 mt-1 mr-3"></i>
+        <span><strong class="font-semibold">Chairman:</strong> Abdilatif Ahmed</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-user-tie text-pink-500 mt-1 mr-3"></i>
+        <span><strong class="font-semibold">Chairlady:</strong> Rayan Hussein</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-pen-fancy text-green-500 mt-1 mr-3"></i>
+        <span><strong class="font-semibold">Secretary:</strong> Musab Mohamed</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-coins text-yellow-500 mt-1 mr-3"></i>
+        <span><strong class="font-semibold">Treasurer:</strong> Muad Ibrahim</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-user-friends text-purple-500 mt-1 mr-3"></i>
+        <span><strong class="font-semibold">Members Rep:</strong> Siraj Abdullahi</span>
+      </li>
+      <!-- Webmaster row: clickable to reveal detailed info about Abdihalim Nassir -->
+      <li class="flex items-start cursor-pointer group" id="abdihalimTrigger">
+        <i class="fas fa-user-tie text-blue-500 mt-1 mr-3 group-hover:text-blue-700 transition"></i>
+        <span><strong class="font-semibold">Webmaster:</strong> <span class="text-blue-600 hover:underline">Abdihalim Nassir</span> <i class="fas fa-chevron-down text-xs text-gray-400 ml-1 group-hover:text-blue-500 transition"></i></span>
+      </li>
+    </ul>
+
+    <!-- Hidden detailed biography card for Abdihalim Nassir Abdikadir -->
+    <div id="abdihalimDetails" class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg hidden transition-all duration-300">
+      <div class="flex items-start">
+        <div class="flex-shrink-0 mr-3">
+          <i class="fas fa-id-card text-blue-600 text-2xl"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-blue-800 text-lg">Abdihalim Nassir Abdikadir</h4>
+          <p class="text-sm text-gray-700 leading-relaxed mt-1">
+            <span class="font-medium">Webmaster &amp; Digital Architect</span> — 
+            Creator and manager of the <span class="font-semibold">Al Falah Charity Organisation</span> website and all associated links. 
+            Possesses extensive technical and humanitarian acumen.
+          </p>
+          <div class="mt-2 text-sm text-gray-800 space-y-1">
+            <p><i class="fas fa-calendar-alt text-blue-500 w-5"></i> <strong>Born:</strong> 26 December 2004, Cottage Hospital, Nanyuki, Laikipia County.</p>
+            
+            <!-- Education Section - Refined Structure without Emojis -->
+            <div class="mt-1">
+              <p><i class="fas fa-graduation-cap text-blue-500 w-5"></i> <strong>Education:</strong></p>
+              <div class="ml-5 space-y-1 text-gray-700">
+                <p><span class="font-semibold">Riara University</span> — Graduate in <strong>International Relations and Diplomacy</strong>.</p>
+                
+                <div class="text-xs text-gray-600 leading-relaxed space-y-1 pl-1">
+                  <p>
+                    <i class="fas fa-university text-blue-400 w-4"></i> 
+                    <span class="font-medium">Institution:</span> Riara University is a premier private institution in Nairobi, Kenya, renowned for its 
+                    <span class="font-semibold">School of International Relations and Diplomacy</span>. The university is distinguished by its 
+                    emphasis on <span class="font-semibold">practical diplomacy</span>, <span class="font-semibold">pan-African perspectives</span>, 
+                    and <span class="font-semibold">global governance frameworks</span>, preparing graduates for impactful careers in 
+                    foreign service, multilateral organisations, and humanitarian policy.
+                  </p>
+                  <p>
+                    <i class="fas fa-book-open text-blue-400 w-4"></i> 
+                    <span class="font-medium">Programme Focus:</span> The curriculum encompasses 
+                    <span class="font-semibold">international law</span>, <span class="font-semibold">conflict resolution</span>, 
+                    <span class="font-semibold">peacekeeping operations</span>, <span class="font-semibold">diplomatic protocol</span>, 
+                    <span class="font-semibold">global political economy</span>, and <span class="font-semibold">African Union and United Nations systems</span>. 
+                    Students engage in <span class="font-semibold">model United Nations simulations</span>, <span class="font-semibold">policy analysis</span>, 
+                    and <span class="font-semibold">field attachments</span> with diplomatic missions and non-governmental organisations — equipping graduates 
+                    with both theoretical depth and applied expertise.
+                  </p>
+                  <p>
+                    <i class="fas fa-flag text-blue-400 w-4"></i> 
+                    <span class="font-medium">Professional Relevance:</span> His academic training in diplomacy 
+                    directly informs his <span class="font-semibold">humanitarian engagements</span>, <span class="font-semibold">policy advocacy</span>, 
+                    and <span class="font-semibold">non-governmental organisation governance</span> — bridging the gap between statecraft and community 
+                    development in the Horn of Africa and beyond.
+                  </p>
+                  <p>
+                    <i class="fas fa-school text-blue-400 w-4"></i> 
+                    <span class="font-medium">Earlier Education:</span> A-Levels at <span class="font-semibold">WAMY HIGH SCHOOL</span>, Nairobi.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Languages Section -->
+            <p class="mt-1"><i class="fas fa-language text-blue-500 w-5"></i> <strong>Languages:</strong> 
+              <span class="font-medium">English</span> (fluent), 
+              <span class="font-medium">Kiswahili</span> (fluent), 
+              <span class="font-medium">French</span> (intermediate — having undertaken both Introduction and Intermediate French classes at Riara University).
+            </p>
+
+            <p><i class="fas fa-handshake text-blue-500 w-5"></i> <strong>Career:</strong> Humanitarian, diplomat, and policy governance specialist. Worked extensively with local and regional non-governmental organisations, enhancing governance frameworks and policy implementation.</p>
+            <p><i class="fas fa-globe-africa text-blue-500 w-5"></i> <strong>Philosophy:</strong> Dedicated to humanitarian service, digital empowerment, and diplomatic engagement for community development.</p>
+          </div>
+          
+          <div class="mt-2 flex flex-wrap gap-2">
+            <span class="text-xs text-blue-700 bg-blue-100 px-3 py-1 rounded-full">
+              <i class="fas fa-code mr-1"></i> Full-stack Webmaster
+            </span>
+            <span class="text-xs text-green-700 bg-green-100 px-3 py-1 rounded-full">
+              <i class="fas fa-hand-holding-heart mr-1"></i> Humanitarian
+            </span>
+            <span class="text-xs text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
+              <i class="fas fa-flag mr-1"></i> Diplomat
+            </span>
+            <span class="text-xs text-amber-700 bg-amber-100 px-3 py-1 rounded-full">
+              <i class="fas fa-language mr-1"></i> EN · SW · FR
+            </span>
+            <span class="text-xs text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">
+              <i class="fas fa-university mr-1"></i> IR &amp; Diplomacy
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/contact.html">
+      <button class="mt-6 w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 rounded-lg font-semibold hover:from-blue-500 hover:to-blue-600 transition shadow-md">
+        Contact Leaders
+      </button>
+    </a>
+  </div>
+</div>
+
+<!-- JavaScript to toggle Abdihalim Nassir details with refined interaction -->
+<script>
+  (function() {
+    const trigger = document.getElementById('abdihalimTrigger');
+    const detailsPanel = document.getElementById('abdihalimDetails');
+    let isVisible = false;
+
+    if (trigger && detailsPanel) {
+      // Click on the entire list item or the name toggles the details
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isVisible = !isVisible;
+        if (isVisible) {
+          detailsPanel.classList.remove('hidden');
+          detailsPanel.classList.add('block');
+          // subtle scroll into view if needed
+          setTimeout(() => {
+            detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        } else {
+          detailsPanel.classList.remove('block');
+          detailsPanel.classList.add('hidden');
+        }
+      });
+
+      // Optional: close when clicking outside (not required, but polite)
+      document.addEventListener('click', function(e) {
+        const card = document.querySelector('.section-card');
+        if (card && !card.contains(e.target) && isVisible) {
+          isVisible = false;
+          detailsPanel.classList.remove('block');
+          detailsPanel.classList.add('hidden');
+        }
+      });
+    }
+  })();
+</script>
+
+<!-- (Font Awesome icons assumed loaded globally; if not, add: 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+-->
 
   <!-- Upcoming Events Card -->
   <div class="bg-white rounded-2xl shadow-lg overflow-hidden section-card transition-transform duration-300 hover:scale-[1.02]">
