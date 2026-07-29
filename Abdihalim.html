@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdihalim Nassir Abdikadir — Profile</title>
+  
+  <!-- Font Awesome 6 (Free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  
+  <!-- Google Fonts: Inter & Playfair Display for refined typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet" />
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .page-container {
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    /* Main Card */
+    .profile-card {
+      background: #ffffff;
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .profile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Hero / Header Section */
+    .hero-section {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2a5298 50%, #1e3a5f 100%);
+      padding: 3rem 2.5rem 2.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -40%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .avatar-frame {
+      flex-shrink: 0;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.5);
+      background: linear-gradient(135deg, #f0f4ff, #d9e2f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .avatar-frame i {
+      font-size: 4.5rem;
+      color: #1e3a5f;
+      opacity: 0.8;
+    }
+    
+    .hero-text {
+      flex: 1;
+      min-width: 220px;
+    }
+    
+    .hero-text .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    
+    .hero-text .title-role {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 0.25rem;
+      letter-spacing: 0.3px;
+    }
+    
+    .hero-text .title-role span {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.15rem 0.9rem;
+      border-radius: 100px;
+      font-weight: 500;
+      display: inline-block;
+      margin-top: 0.3rem;
+      backdrop-filter: blur(4px);
+      font-size: 0.9rem;
+    }
+    
+    .quick-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    
+    .quick-badges .badge {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    
+    .quick-badges .badge i {
+      margin-right: 0.4rem;
+      font-size: 0.65rem;
+      opacity: 0.8;
+    }
+    
+    /* Body / Details */
+    .body-section {
+      padding: 2.5rem;
+    }
+    
+    /* Bio Summary */
+    .bio-summary {
+      background: #f1f5f9;
+      border-radius: 1.5rem;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2.5rem;
+      border-left: 6px solid #2a5298;
+      font-size: 1rem;
+      color: #1e293b;
+      line-height: 1.7;
+    }
+    
+    .bio-summary strong {
+      color: #1e3a5f;
+    }
+    
+    /* Grid Layout for Details */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    @media (max-width: 700px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .hero-section {
+        padding: 2rem 1.5rem;
+      }
+      
+      .hero-text .name {
+        font-size: 2rem;
+      }
+      
+      .body-section {
+        padding: 1.75rem;
+      }
+      
+      .bio-summary {
+        padding: 1.25rem;
+      }
+    }
+    
+    .detail-block {
+      background: #f8fafc;
+      border-radius: 1.25rem;
+      padding: 1.5rem 1.75rem;
+      transition: background 0.2s ease;
+    }
+    
+    .detail-block:hover {
+      background: #f1f5f9;
+    }
+    
+    .detail-block .block-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.6rem;
+    }
+    
+    .detail-block .block-title i {
+      color: #2a5298;
+      font-size: 1rem;
+    }
+    
+    .detail-block ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .detail-block ul li {
+      padding: 0.4rem 0;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .detail-block ul li:last-child {
+      border-bottom: none;
+    }
+    
+    .detail-block ul li .li-icon {
+      width: 1.4rem;
+      flex-shrink: 0;
+      color: #2a5298;
+      font-size: 0.85rem;
+      margin-top: 0.15rem;
+    }
+    
+    .detail-block ul li .li-label {
+      font-weight: 600;
+      color: #0f172a;
+    }
+    
+    .detail-block ul li .li-value {
+      color: #334155;
+    }
+    
+    .detail-block .text-content {
+      font-size: 0.92rem;
+      color: #1e293b;
+      line-height: 1.7;
+    }
+    
+    .detail-block .text-content p {
+      margin-bottom: 0.75rem;
+    }
+    
+    .detail-block .text-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .detail-block .text-content .highlight {
+      font-weight: 600;
+      color: #1e3a5f;
+    }
+    
+    .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    
+    .tag-group .tag {
+      background: #e2e8f0;
+      color: #1e293b;
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 0.2rem 0.9rem;
+      border-radius: 100px;
+      letter-spacing: 0.2px;
+    }
+    
+    .tag-group .tag i {
+      margin-right: 0.3rem;
+      font-size: 0.65rem;
+    }
+    
+    .tag-group .tag.blue {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .tag-group .tag.green {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .tag-group .tag.purple {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+    
+    .tag-group .tag.amber {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .tag-group .tag.indigo {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    
+    .tag-group .tag.rose {
+      background: #ffe4e6;
+      color: #9f1239;
+    }
+    
+    .tag-group .tag.cyan {
+      background: #cffafe;
+      color: #0e7490;
+    }
+    
+    /* Footer / Contact */
+    .footer-actions {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 2rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #1e3a5f, #2a5298);
+      color: #ffffff;
+      box-shadow: 0 8px 20px -8px rgba(42, 82, 152, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -10px rgba(42, 82, 152, 0.5);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #1e293b;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .btn-outline:hover {
+      border-color: #2a5298;
+      color: #2a5298;
+      background: #f8fafc;
+    }
+    
+    /* Decorative divider */
+    .divider {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #2a5298, #6b8cae);
+      border-radius: 4px;
+      margin: 0.25rem 0 1rem 0;
+    }
+    
+    /* Subtitle in blocks */
+    .sub-meta {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.1rem;
+      font-weight: 400;
+    }
+    
+    /* Responsive fine-tune */
+    @media (max-width: 480px) {
+      .hero-text .name {
+        font-size: 1.7rem;
+      }
+      
+      .avatar-frame {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .avatar-frame i {
+        font-size: 3.5rem;
+      }
+      
+      .body-section {
+        padding: 1.25rem;
+      }
+      
+      .detail-block {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<div class="page-container">
+  
+  <div class="profile-card">
+    
+    <!-- ========== HERO / HEADER ========== -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="avatar-frame">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="hero-text">
+          <h1 class="name">Abdihalim Nassir Abdikadir</h1>
+          <div class="title-role">
+            Webmaster &amp; Digital Architect
+            <span><i class="fas fa-globe-africa"></i> Humanitarian · Diplomat</span>
+          </div>
+          <div class="quick-badges">
+            <span class="badge"><i class="fas fa-code"></i> Full-stack</span>
+            <span class="badge"><i class="fas fa-hand-holding-heart"></i> Humanitarian</span>
+            <span class="badge"><i class="fas fa-flag"></i> Diplomacy</span>
+            <span class="badge"><i class="fas fa-language"></i> EN · SW · FR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ========== BODY ========== -->
+    <div class="body-section">
+      
+      <!-- Bio Summary -->
+      <div class="bio-summary">
+        <p>
+          <strong>Abdihalim Nassir Abdikadir</strong> is a humanitarian, diplomat, and digital architect 
+          dedicated to bridging technology, governance, and community development. 
+          As the <strong>Webmaster</strong> of <strong>Al Falah Charity Organisation</strong>, 
+          he manages the entire digital ecosystem — from website architecture to link infrastructure — 
+          ensuring seamless access to humanitarian resources. With a degree in 
+          <strong>International Relations and Diplomacy</strong> from <strong>Riara University</strong>, 
+          he applies diplomatic acumen to non-governmental governance, policy enhancement, 
+          and grassroots empowerment across the Horn of Africa.
+        </p>
+      </div>
+      
+      <!-- Details Grid -->
+      <div class="details-grid">
+        
+        <!-- Column 1: Personal & Education -->
+        <div class="detail-block">
+          <div class="block-title">
+            <i class="fas fa-id-card"></i> Personal &amp; Education
+          </div>
+          <ul>
+            <li>
+              <span class="li-icon"><i class="fas fa-calendar-alt"></i></span>
+              <span><span class="li-label">Born:</span> <span class="li-value">26 December 2004</span></span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-map-pin"></i></span>
+              <span><span class="li-label">Birthplace:</span> <span class="li-value">Cottage Hospital, Nanyuki, Laikipia County, Kenya</span></span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-graduation-cap"></i></span>
+              <span>
+                <span class="li-label">University:</span> 
+                <span class="li-value"><strong>Riara University</strong> — B.A. International Relations &amp; Diplomacy</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-school"></i></span>
+              <span>
+                <span class="li-label">Secondary:</span> 
+                <span class="li-value">WAMY HIGH SCHOOL, Nairobi (A-Levels)</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-language"></i></span>
+              <span>
+                <span class="li-label">Languages:</span> 
+                <span class="li-value">
+                  English <span class="sub-meta">(fluent)</span>, 
+                  Kiswahili <span class="sub-meta">(fluent)</span>, 
+                  French <span class="sub-meta">(intermediate — Introduction &amp; Intermediate classes at Riara)</span>
+                </span>
+              </span>
+            </li>
+          </ul>
+          
+          <div class="divider"></div>
+          
+          <div class="text-content">
+            <p>
+              <i class="fas fa-university" style="color:#2a5298; margin-right:0.4rem;"></i>
+              <span class="highlight">Riara University</span> — a premier private institution in Nairobi — 
+              is renowned for its <strong>School of International Relations and Diplomacy</strong>, 
+              emphasising practical diplomacy, pan-African perspectives, and global governance frameworks.
+            </p>
+            <p>
+              <i class="fas fa-book-open" style="color:#2a5298; margin-right:0.4rem;"></i>
+              <span class="highlight">Programme Focus:</span> International law, conflict resolution, 
+              peacekeeping, diplomatic protocol, global political economy, and AU/UN systems — 
+              complemented by model UN simulations, policy analysis, and field attachments.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Column 2: Career, Work & Philosophy -->
+        <div class="detail-block">
+          <div class="block-title">
+            <i class="fas fa-briefcase"></i> Career &amp; Impact
+          </div>
+          <ul>
+            <li>
+              <span class="li-icon"><i class="fas fa-globe"></i></span>
+              <span>
+                <span class="li-label">Current Role:</span> 
+                <span class="li-value"><strong>Webmaster</strong> — Al Falah Charity Organisation</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-code"></i></span>
+              <span>
+                <span class="li-label">Digital Portfolio:</span> 
+                <span class="li-value">Creator and manager of the entire Al Falah website and link infrastructure</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-handshake"></i></span>
+              <span>
+                <span class="li-label">Professional Focus:</span> 
+                <span class="li-value">Humanitarian service, policy governance, and diplomatic engagement</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-building-columns"></i></span>
+              <span>
+                <span class="li-label">NGO Experience:</span> 
+                <span class="li-value">Extensive work with local and regional non-governmental organisations</span>
+              </span>
+            </li>
+            <li>
+              <span class="li-icon"><i class="fas fa-scale-balanced"></i></span>
+              <span>
+                <span class="li-label">Governance:</span> 
+                <span class="li-value">Key contributor to enhancing governance frameworks and policy implementation</span>
+              </span>
+            </li>
+          </ul>
+          
+          <div class="divider"></div>
+          
+          <div class="text-content">
+            <p>
+              <i class="fas fa-flag" style="color:#2a5298; margin-right:0.4rem;"></i>
+              <span class="highlight">Diplomatic Acumen:</span> 
+              His training in international relations directly informs his humanitarian engagements, 
+              policy advocacy, and NGO governance — bridging statecraft and community development 
+              in the Horn of Africa and beyond.
+            </p>
+            <p>
+              <i class="fas fa-heart" style="color:#2a5298; margin-right:0.4rem;"></i>
+              <span class="highlight">Philosophy:</span> 
+              Dedicated to humanitarian service, digital empowerment, and diplomatic engagement 
+              for sustainable community development.
+            </p>
+          </div>
+        </div>
+        
+      </div>
+      <!-- end details-grid -->
+      
+      <!-- Tags / Expertise -->
+      <div style="margin-top: 1.5rem;">
+        <div class="tag-group">
+          <span class="tag blue"><i class="fas fa-code"></i> Full-stack Webmaster</span>
+          <span class="tag green"><i class="fas fa-hand-holding-heart"></i> Humanitarian</span>
+          <span class="tag purple"><i class="fas fa-flag"></i> Diplomat</span>
+          <span class="tag amber"><i class="fas fa-language"></i> EN · SW · FR</span>
+          <span class="tag indigo"><i class="fas fa-university"></i> IR &amp; Diplomacy</span>
+          <span class="tag rose"><i class="fas fa-scale-balanced"></i> Policy Governance</span>
+          <span class="tag cyan"><i class="fas fa-globe-africa"></i> Pan-African</span>
+        </div>
+      </div>
+      
+      <!-- Footer Actions -->
+      <div class="footer-actions">
+        <a href="#" class="btn btn-primary">
+          <i class="fas fa-envelope"></i> Contact Abdihalim
+        </a>
+        <a href="#" class="btn btn-outline">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="#" class="btn btn-outline">
+          <i class="fas fa-globe"></i> Al Falah Website
+        </a>
+      </div>
+      
+    </div>
+    <!-- end body-section -->
+    
+  </div>
+  <!-- end profile-card -->
+  
+</div>
+<!-- end page-container -->
+
+</body>
+</html>
